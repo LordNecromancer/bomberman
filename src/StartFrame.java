@@ -1,5 +1,3 @@
-
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -52,8 +50,9 @@ public class StartFrame extends JFrame {
  * handles everything. You could specify all aspects of the game when you are creating the gameManager.
  */
 
-                    GameManager gameManager = new GameManager(widthEntered, heightEntered,null, false);
+                    GameManager gameManager = new GameManager(widthEntered, heightEntered, null, false);
                     gameManager.createBoard();
+                    gameManager.init();
                 }
 
 

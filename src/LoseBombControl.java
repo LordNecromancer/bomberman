@@ -14,6 +14,6 @@ public class LoseBombControl extends Poison implements Serializable {
     }
 
     public void doYourThing() {
-        //   CreateBoard.player.bombControl=false;
+        CreateBoard.player.bombControl = false;
     }
 }

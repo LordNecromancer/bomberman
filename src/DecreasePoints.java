@@ -10,9 +10,9 @@ public class DecreasePoints extends Poison implements Serializable {
 
     CreateBoard createBoard;
 
-    public DecreasePoints(CreateBoard createBoard) {
+    public DecreasePoints() {
         super.type = type;
-        this.createBoard = createBoard;
+        createBoard = CreateBoard.createBoard;
     }
 
     public void doYourThing() {

@@ -167,8 +167,9 @@ public class GameClient {
                         } else {
                             if (string[0].startsWith("#roomName$")) {
                                 roomName = string[0].substring(10);
-                                GameManager gameManager = new GameManager(width, height,null, true);
+                                GameManager gameManager = new GameManager(width, height, null, true);
                                 gameManager.createBoard();
+                                gameManager.init();
                                 client.createBoard = gameManager.createBoard;
                                 createBoard.player = player;
 

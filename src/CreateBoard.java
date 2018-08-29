@@ -31,15 +31,15 @@ public class CreateBoard extends JFrame implements Serializable {
     EnemyMovementThread enemyMove = new EnemyMovementThread(this);
     EnemyMovementThreadTypeTwo enemyMove2 = new EnemyMovementThreadTypeTwo(this);
     private Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
-    Player player = null;
+    static Player player = null;
     private int dimension;
     static int bombNum = 1;
+    static CreateBoard createBoard;
     int bombCount = 0;
     private int level;
     private boolean isMoving = false;
     ArrayList<BombCell> bombCells = new ArrayList<>();
     ArrayList<Enemy> enemies = new ArrayList<>();
-    CreateBoard createBoard;
     private ImageIcon imageIcon = null;
     Date date;
     boolean isOnline = false;
@@ -52,16 +52,17 @@ public class CreateBoard extends JFrame implements Serializable {
         this.obstacle = gameManager.getObstacleCount();
         this.dimension = gameManager.getDimension();
         this.bombNum = bombNum;
+        CreateBoard.createBoard = this;
         this.isOnline = isOnline;
         CreateBoard.bombNum = gameManager.getBombLimit();
-        if (!isOnline) {
+        if (!isOnline && this.gameTime == null) {
             this.gameTime = new Time(300);
         }
         CreateBoard.points = gameManager.getPoints();
         this.level = gameManager.getLevel();
         isMoving = false;
         date = Date.from(Instant.now());
-        this.player=player;
+        this.player = player;
 
 
         int realSizeWidth = dimension * (2 + w);
@@ -204,10 +205,10 @@ public class CreateBoard extends JFrame implements Serializable {
     private PowerUps getRandomPowerUp() {
         ArrayList<PowerUps> powerUps = new ArrayList<>();
         powerUps.add(new IncreaseBombs());
-        powerUps.add(new IncreasePoints(this));
+        powerUps.add(new IncreasePoints());
         powerUps.add(new IncreaseRadius());
-        powerUps.add(new IncreaseSpeed(this));
-        powerUps.add(new BombControl(this));
+        powerUps.add(new IncreaseSpeed());
+        powerUps.add(new BombControl());
         powerUps.add(new GhostAbility(this));
 
         Random r = new Random();
@@ -218,9 +219,9 @@ public class CreateBoard extends JFrame implements Serializable {
     private Poison getRandomPoison() {
         ArrayList<Poison> poisons = new ArrayList<>();
         poisons.add(new DecreaseBombs());
-        poisons.add(new DecreasePoints(this));
+        poisons.add(new DecreasePoints());
         poisons.add(new DecreaseRadius());
-        poisons.add(new DecreaseSpeed(this));
+        poisons.add(new DecreaseSpeed());
         poisons.add(new LoseBombControl());
 
         Random r = new Random();
@@ -346,13 +347,10 @@ public class CreateBoard extends JFrame implements Serializable {
 
     void addScore(int score) {
         System.out.println(score);
-        System.out.println(points);
 
         if (points + score > 0) {
-            System.out.println(points);
 
             points += score;
-            System.out.println(points);
 
         } else {
             points = 0;
@@ -403,6 +401,7 @@ public class CreateBoard extends JFrame implements Serializable {
     void goToNextLevel() {
         player.playerPositionX = 1;
         player.playerPositionY = 1;
+        gameManager.player = player;
         bombCount = 0;
         gameManager.setPoints(CreateBoard.points);
 

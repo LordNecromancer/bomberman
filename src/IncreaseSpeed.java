@@ -9,13 +9,12 @@ public class IncreaseSpeed extends PowerUps implements Serializable {
 
     CreateBoard createBoard;
 
-    public IncreaseSpeed(CreateBoard createBoard) {
-        this.createBoard = createBoard;
+    public IncreaseSpeed() {
         super.type = type;
     }
 
     public void doYourThing() {
-        if (createBoard.player.playerSpeed > 0)
-            createBoard.player.playerSpeed--;
+        if (CreateBoard.player.playerSpeed > 0)
+            CreateBoard.player.playerSpeed--;
     }
 }

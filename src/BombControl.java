@@ -8,13 +8,13 @@ public class BombControl extends PowerUps implements Serializable {
 
     CreateBoard createBoard;
 
-    BombControl(CreateBoard createBoard) {
+    BombControl() {
 
-        this.createBoard = createBoard;
+
         super.type = type;
     }
 
     public void doYourThing() {
-        createBoard.player.bombControl = true;
+        CreateBoard.player.bombControl = true;
     }
 }

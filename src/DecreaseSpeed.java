@@ -9,13 +9,13 @@ public class DecreaseSpeed extends Poison implements Serializable {
 
     CreateBoard createBoard;
 
-    public DecreaseSpeed(CreateBoard createBoard) {
+    public DecreaseSpeed() {
         this.createBoard = createBoard;
         super.type = type;
     }
 
     public void doYourThing() {
-        if (createBoard.player.playerSpeed > 0)
-            createBoard.player.playerSpeed++;
+        if (CreateBoard.player.playerSpeed > 0)
+            CreateBoard.player.playerSpeed++;
     }
 }

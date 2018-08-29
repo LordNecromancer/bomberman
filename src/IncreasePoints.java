@@ -9,12 +9,11 @@ public class IncreasePoints extends PowerUps implements Serializable {
 
     CreateBoard createBoard;
 
-    public IncreasePoints(CreateBoard createBoard) {
+    public IncreasePoints() {
         super.type = type;
-        this.createBoard = createBoard;
     }
 
     public void doYourThing() {
-        createBoard.addScore(100);
+        CreateBoard.createBoard.addScore(100);
     }
 }
