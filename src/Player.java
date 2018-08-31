@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.util.ArrayList;
 
 
 public class Player extends GameComponent implements Serializable {
@@ -17,6 +18,12 @@ public class Player extends GameComponent implements Serializable {
     public boolean ghostAbility = true;
     boolean isGhosting = false;
     GameComponent disappearedObject = null;
+    int bombNum=1;
+    int bombCount=0;
+    int bombRadius = 1;
+    ArrayList<BombCell> bombCells = new ArrayList<>();
+
+
 
 
     public Player(String name) {
@@ -33,6 +40,8 @@ public class Player extends GameComponent implements Serializable {
 
     public void die() {
         this.isAlive = false;
+        bombCount=0;
+        bombNum=1;
     }
 
 }

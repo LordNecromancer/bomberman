@@ -13,6 +13,6 @@ public class IncreaseRadius extends PowerUps implements Serializable {
     }
 
     public void doYourThing() {
-        CreateBoard.bombRadius++;
+        CreatingGameBoard.player.bombRadius++;
     }
 }

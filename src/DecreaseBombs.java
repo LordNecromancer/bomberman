@@ -12,8 +12,8 @@ public class DecreaseBombs extends Poison implements Serializable {
     }
 
     public void doYourThing() {
-        if (CreateBoard.bombNum >= 1)
+        if (CreatingGameBoard.player.bombNum >= 1)
 
-            CreateBoard.bombNum = CreateBoard.bombNum - 1;
+            CreatingGameBoard.player.bombNum = CreatingGameBoard.player.bombNum - 1;
     }
 }

@@ -8,16 +8,16 @@ public class DecreasePoints extends Poison implements Serializable {
     private static final long serialVersionUID = 1113799434508276969L;
 
 
-    CreateBoard createBoard;
+    CreatingGameBoard creatingGameBoard;
 
     public DecreasePoints() {
         super.type = type;
-        createBoard = CreateBoard.createBoard;
+        creatingGameBoard = CreatingGameBoard.creatingGameBoard;
     }
 
     public void doYourThing() {
 
-        createBoard.addScore(-100);
+        creatingGameBoard.addScore(-100);
     }
 }
 

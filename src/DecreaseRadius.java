@@ -14,8 +14,8 @@ public class DecreaseRadius extends Poison implements Serializable {
     }
 
     public void doYourThing() {
-        if (CreateBoard.bombRadius > 1)
+        if (CreatingGameBoard.player.bombRadius > 1)
 
-            CreateBoard.bombRadius--;
+            CreatingGameBoard.player.bombRadius--;
     }
 }

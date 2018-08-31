@@ -8,11 +8,11 @@ public class BombThread extends Thread implements Serializable {
     private int X;
     private int Y;
     private BombCell bomb;
-    CreateBoard createBoard;
+    CreatingGameBoard creatingGameBoard;
 
-    public BombThread(BombCell bombCell, CreateBoard createBoard, int x, int y) {
+    public BombThread(BombCell bombCell, CreatingGameBoard creatingGameBoard, int x, int y) {
         this.bomb = bombCell;
-        this.createBoard = createBoard;
+        this.creatingGameBoard = creatingGameBoard;
         this.X = x;
         this.Y = y;
     }
@@ -20,12 +20,11 @@ public class BombThread extends Thread implements Serializable {
     @Override
     public void run() {
         try {
-            if (!createBoard.player.bombControl) {
+            if (!creatingGameBoard.player.bombControl) {
                 Thread.sleep(bomb.bombExplosionTime * 1000);
 
                 explode();
-                createBoard.bombCount--;
-                // createBoard.createFrame();
+                // creatingGameBoard.createFrame();
 
             }
         } catch (InterruptedException e) {
@@ -34,8 +33,10 @@ public class BombThread extends Thread implements Serializable {
     }
 
     public void explode() throws InterruptedException {
+        creatingGameBoard.player.bombCount--;
 
-        createBoard.bombCells.remove(bomb);
+
+        creatingGameBoard.player.bombCells.remove(bomb);
         for (int i = X - bomb.bombRadius; i <= X + bomb.bombRadius; i++) {
 
             destroy(i, Y);
@@ -46,36 +47,36 @@ public class BombThread extends Thread implements Serializable {
             destroy(X, j);
 
         }
-        createBoard.createFrame();
+        creatingGameBoard.createFrame();
     }
 
 
     private void destroy(int i, int j) throws InterruptedException {
 
-        if (i > -1 && j > -1 && i < createBoard.width + 2 && j < createBoard.height + 2) {
-            if (createBoard.gameComponents[i][j].isExplosive) {
-                if (createBoard.gameComponents[i][j].type.equals("obstacle")) {
-                    destroyObstacle(createBoard.gameComponents[i], j);
+        if (i > -1 && j > -1 && i < creatingGameBoard.width + 2 && j < creatingGameBoard.height + 2) {
+            if (creatingGameBoard.gameComponents[i][j].isExplosive) {
+                if (creatingGameBoard.gameComponents[i][j].type.equals("obstacle")) {
+                    destroyObstacle(creatingGameBoard.gameComponents[i], j);
 
 
                 } else {
-                    if (createBoard.player.bombSet && createBoard.player.currentBomb == bomb) {
-                        createBoard.killPlayer();
+                    if (creatingGameBoard.player.bombSet && creatingGameBoard.player.currentBomb == bomb) {
+                        creatingGameBoard.killPlayer();
                     }
-                    if (createBoard.gameComponents[i][j].type.equals("player")) {
-                        createBoard.killPlayer();
-                    }
-
-                    if (createBoard.gameComponents[i][j].type.equals("bomb") && (i != X || j != Y)) {
-
-                        destroyOtherBombs(createBoard.gameComponents[i][j]);
-                    }
-                    if (createBoard.gameComponents[i][j] instanceof Enemy) {
-
-                        destroyEnemy(createBoard.gameComponents[i][j]);
+                    if (creatingGameBoard.gameComponents[i][j].type.equals("player")) {
+                        creatingGameBoard.killPlayer();
                     }
 
-                    createBoard.gameComponents[i][j] = new FieldCell();
+                    if (creatingGameBoard.gameComponents[i][j].type.equals("bomb") && (i != X || j != Y)) {
+
+                        destroyOtherBombs(creatingGameBoard.gameComponents[i][j]);
+                    }
+                    if (creatingGameBoard.gameComponents[i][j] instanceof Enemy) {
+
+                        destroyEnemy(creatingGameBoard.gameComponents[i][j]);
+                    }
+
+                    creatingGameBoard.gameComponents[i][j] = new FieldCell();
                 }
             }
         }
@@ -83,21 +84,21 @@ public class BombThread extends Thread implements Serializable {
 
     private void destroyEnemy(GameComponent gameComponent) {
         Enemy enemy = (Enemy) gameComponent;
-        createBoard.enemyCount--;
-        createBoard.addScore(20 * enemy.level);
+        creatingGameBoard.enemyCount--;
+        creatingGameBoard.addScore(20 * enemy.level);
     }
 
     private void destroyOtherBombs(GameComponent gameComponent) throws InterruptedException {
         BombCell bombCell = (BombCell) gameComponent;
-        if (createBoard.player.bombSet && createBoard.player.currentBomb == bomb) {
-            createBoard.killPlayer();
+        if (creatingGameBoard.player.bombSet && creatingGameBoard.player.currentBomb == bomb) {
+            creatingGameBoard.killPlayer();
         }
         bombCell.bombThread.explode();
     }
 
     private void destroyObstacle(GameComponent[] gameComponent, int j) {
         ObstacleCell obstacleCell = (ObstacleCell) gameComponent[j];
-        createBoard.addScore(CreateBoard.obstacleScore);
+        creatingGameBoard.addScore(CreatingGameBoard.obstacleScore);
         if (obstacleCell.hasDoor) {
             gameComponent[j] = new Door();
 

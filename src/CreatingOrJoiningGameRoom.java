@@ -8,7 +8,7 @@ import java.io.IOException;
 /**
  * Created by Sun on 08/12/2018.
  */
-public class CreateOrJoinRoom extends JFrame {
+public class CreatingOrJoiningGameRoom extends JFrame {
 
 
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -28,7 +28,7 @@ public class CreateOrJoinRoom extends JFrame {
     private boolean isStarted = false;
     private SetUpGraphics graphics = new SetUpGraphics(width, height);
 
-    public CreateOrJoinRoom(GameClient client) throws IOException {
+    public CreatingOrJoiningGameRoom(GameClient client) throws IOException {
         this.client = client;
     }
 
@@ -93,7 +93,7 @@ public class CreateOrJoinRoom extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    CreateGameRoom createGameRoom = new CreateGameRoom(client);
+                    CreatingGameRoom creatingGameRoom = new CreatingGameRoom(client);
 
                 } catch (IOException e1) {
                     e1.printStackTrace();

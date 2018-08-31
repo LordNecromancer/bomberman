@@ -16,13 +16,13 @@ public class GameClient {
     private Socket socket;
     private String name;
     private boolean isStarted = false;
-    CreateBoard createBoard;
+    CreatingGameBoard creatingGameBoard;
     static GameClient client;
     Player player;
     int width;
     int height;
     private String roomName;
-    private CreateOrJoinRoom createOrJoinRoom;
+    private CreatingOrJoiningGameRoom createOrJoinRoom;
     private long time;
 
     GameClient() throws IOException, ClassNotFoundException {
@@ -44,7 +44,7 @@ public class GameClient {
 
         run();
 
-        createOrJoinRoom = new CreateOrJoinRoom(this);
+        createOrJoinRoom = new CreatingOrJoiningGameRoom(this);
 
         // text = createOrJoinRoom.textShown;
 
@@ -111,8 +111,8 @@ public class GameClient {
 
                     if (object[0] instanceof Player) {
                         player = (Player) object[0];
-                        if (createBoard != null)
-                            createBoard.player = player;
+                        if (creatingGameBoard != null)
+                            creatingGameBoard.player = player;
                     } else if (object[0] instanceof GameComponent[][]) {
 
                         GameComponent[][] array = null;
@@ -121,9 +121,9 @@ public class GameClient {
                         array = (GameComponent[][]) object[0];
 
 
-                        if (createBoard != null) {
-                            createBoard.gameComponents = array;
-                            createBoard.createFrame();
+                        if (creatingGameBoard != null) {
+                            creatingGameBoard.gameComponents = array;
+                            creatingGameBoard.createFrame();
                         }
                     } else if (object[0] instanceof String) {
 
@@ -135,8 +135,8 @@ public class GameClient {
 
                         if (string[0].equals("JoinedRoom$")) {
 
-                            createBoard.gameTime = new Time(client.time);
-                            createBoard.setTimer();
+                            creatingGameBoard.gameTime = new Time(client.time);
+                            creatingGameBoard.setTimer();
                         }
 
 
@@ -146,7 +146,7 @@ public class GameClient {
                             createOrJoinRoom.textShown.setText("No such room exists." + "\r\n");
 
                         } else if (string[0].startsWith("#score$")) {
-                            createBoard.refreshScore(string[0].substring(7));
+                            creatingGameBoard.refreshScore(string[0].substring(7));
                         } else if (string[0].startsWith("#width$")) {
                             width = Integer.valueOf(string[0].substring(7));
                         } else if (string[0].startsWith("#height$")) {
@@ -154,8 +154,8 @@ public class GameClient {
 
                         } else if (string[0].startsWith("#time$")) {
                             time = Integer.valueOf(string[0].substring(6));
-                            if (createBoard != null) {
-                                createBoard.gameTime = new Time(time);
+                            if (creatingGameBoard != null) {
+                                creatingGameBoard.gameTime = new Time(time);
                             }
 
                         } else if (string[0].startsWith("#playerX$")) {
@@ -170,11 +170,11 @@ public class GameClient {
                                 GameManager gameManager = new GameManager(width, height, null, true);
                                 gameManager.createBoard();
                                 gameManager.init();
-                                client.createBoard = gameManager.createBoard;
-                                createBoard.player = player;
+                                client.creatingGameBoard = gameManager.creatingGameBoard;
+                                creatingGameBoard.player = player;
 
-                                createBoard.gameTime = new Time(time);
-                                createBoard.setTimer();
+                                creatingGameBoard.gameTime = new Time(time);
+                                creatingGameBoard.setTimer();
 
 
                             } else if (string[0].equals("#lost$")) {
@@ -215,11 +215,6 @@ public class GameClient {
         }
     }
 
-//    private void closeConnection() throws IOException {
-//        dataInputStream.close();
-//        dataOutputStream.close();
-//        socket.close();
-//    }
 
     void getRoomsList() throws IOException {
 

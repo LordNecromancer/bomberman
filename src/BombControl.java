@@ -6,7 +6,7 @@ public class BombControl extends PowerUps implements Serializable {
 
     final private String type = "bombControl";
 
-    CreateBoard createBoard;
+    CreatingGameBoard creatingGameBoard;
 
     BombControl() {
 
@@ -15,6 +15,6 @@ public class BombControl extends PowerUps implements Serializable {
     }
 
     public void doYourThing() {
-        CreateBoard.player.bombControl = true;
+        CreatingGameBoard.player.bombControl = true;
     }
 }

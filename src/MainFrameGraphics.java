@@ -6,10 +6,10 @@ import java.io.Serializable;
  * Created by Sun on 07/31/2018.
  */
 public class MainFrameGraphics implements Serializable {
-    CreateBoard createBoard;
+    CreatingGameBoard creatingGameBoard;
 
-    public MainFrameGraphics(CreateBoard createBoard) {
-        this.createBoard = createBoard;
+    public MainFrameGraphics(CreatingGameBoard creatingGameBoard) {
+        this.creatingGameBoard = creatingGameBoard;
     }
 
     private ImageIcon hurdle = new ImageIcon("obstacle.png");
@@ -33,11 +33,11 @@ public class MainFrameGraphics implements Serializable {
 
 
     void crateGameFrame(int w, int h, int dw, int dh) {
-        createBoard.setTitle("BomberMan");
-        createBoard.setSize(dh, dw + dw / 8);
-        createBoard.setVisible(true);
-        createBoard.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        contentPane = (JPanel) createBoard.getContentPane();
+        creatingGameBoard.setTitle("BomberMan");
+        creatingGameBoard.setSize(dh, dw + dw / 8);
+        creatingGameBoard.setVisible(true);
+        creatingGameBoard.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        contentPane = (JPanel) creatingGameBoard.getContentPane();
         contentPane.setBackground(Color.black);
         createTopPanel(dw, dh);
         createCenterPanel(w, h, dw, dh);
@@ -58,7 +58,7 @@ public class MainFrameGraphics implements Serializable {
     }
 
     private void createScoreLabel() {
-        score = new JLabel(Integer.toString(createBoard.points));
+        score = new JLabel(Integer.toString(creatingGameBoard.points));
         score.setForeground(Color.CYAN);
         score.setSize(top.getWidth() / 2, top.getHeight());
     }
@@ -78,11 +78,11 @@ public class MainFrameGraphics implements Serializable {
         center.setLayout(new GridLayout(2 + w, 2 + h));
         center.setBackground(Color.black);
         center.setPreferredSize(new Dimension(dh / 2, dw / 2));
-        listeners = new ActionListeners(createBoard);
-        createBoard.addKeyListener(listeners);
+        listeners = new ActionListeners(creatingGameBoard);
+        creatingGameBoard.addKeyListener(listeners);
         for (int i = 0; i < w + 2; i++) {
             for (int j = 0; j < h + 2; j++) {
-                createBoard.labels[i][j] = new JLabel();
+                creatingGameBoard.labels[i][j] = new JLabel();
 
             }
         }
@@ -90,10 +90,10 @@ public class MainFrameGraphics implements Serializable {
 
     public JLabel showTheObject(int i, int j) {
 
-        JLabel label = createBoard.labels[i][j];
+        JLabel label = creatingGameBoard.labels[i][j];
 
 
-        switch (createBoard.gameComponents[i][j].type) {
+        switch (creatingGameBoard.gameComponents[i][j].type) {
             case "player":
                 label = new JLabel(man);
                 break;
@@ -161,16 +161,10 @@ public class MainFrameGraphics implements Serializable {
 
         return label;
     }
-//    private void addKeyListenerToFrame() {
-//
-//
-//        graphics.center.addKeyListener(listeners);
-//
-//
-//    }
+
 
     public ImageIcon getBombIcon(int i, int j) {
-        if (createBoard.player.playerPositionX == i && createBoard.player.playerPositionY == j) {
+        if (creatingGameBoard.player.playerPositionX == i && creatingGameBoard.player.playerPositionY == j) {
             return manBomb;
         } else {
             return bombIcon;

@@ -7,10 +7,10 @@ import java.util.Date;
 
 
 public class ActionListeners implements KeyListener, Serializable {
-    CreateBoard createBoard;
+    CreatingGameBoard creatingGameBoard;
 
-    public ActionListeners(CreateBoard createBoard) {
-        this.createBoard = createBoard;
+    public ActionListeners(CreatingGameBoard creatingGameBoard) {
+        this.creatingGameBoard = creatingGameBoard;
 
     }
 
@@ -32,30 +32,30 @@ public class ActionListeners implements KeyListener, Serializable {
          */
 
 
-        if (!createBoard.isOnline) {
+        if (!creatingGameBoard.isOnline) {
             if ((e.getKeyCode() == KeyEvent.VK_S) && (e.getModifiers() & KeyEvent.CTRL_MASK) != 0) {
 
-                GameManager.saveFile(createBoard);
+                GameManager.saveFile(creatingGameBoard);
             }
 
             if ((e.getKeyCode() == KeyEvent.VK_O) && (e.getModifiers() & KeyEvent.CTRL_MASK) != 0) {
 
                 GameManager.load();
-                createBoard.dispose();
+                creatingGameBoard.dispose();
             }
         }
 
-        int playerx = createBoard.player.playerPositionX;
-        int playery = createBoard.player.playerPositionY;
-        if (createBoard.player.isAlive) {
-            if (createBoard.isPassed()) {
+        int playerx = creatingGameBoard.player.playerPositionX;
+        int playery = creatingGameBoard.player.playerPositionY;
+        if (creatingGameBoard.player.isAlive) {
+            if (creatingGameBoard.isPassed()) {
                 try {
-                    createBoard.date = Date.from(Instant.now());
+                    creatingGameBoard.date = Date.from(Instant.now());
 
                     if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 
 
-                        if (createBoard.isOnline) {
+                        if (creatingGameBoard.isOnline) {
                             goDown(playerx, playery);
                         } else {
                             moveOffline(playerx + 1, playery);
@@ -65,7 +65,7 @@ public class ActionListeners implements KeyListener, Serializable {
                     if (e.getKeyCode() == KeyEvent.VK_UP) {
 
 
-                        if (createBoard.isOnline) {
+                        if (creatingGameBoard.isOnline) {
                             goUp(playerx, playery);
                         } else {
                             moveOffline(playerx - 1, playery);
@@ -74,7 +74,7 @@ public class ActionListeners implements KeyListener, Serializable {
 
 
                     if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                        if (createBoard.isOnline) {
+                        if (creatingGameBoard.isOnline) {
                             goRight(playerx, playery);
                         } else {
                             moveOffline(playerx, playery + 1);
@@ -84,7 +84,7 @@ public class ActionListeners implements KeyListener, Serializable {
 
                     if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 
-                        if (createBoard.isOnline) {
+                        if (creatingGameBoard.isOnline) {
                             goLeft(playerx, playery);
                         } else {
                             moveOffline(playerx, playery - 1);
@@ -96,23 +96,23 @@ public class ActionListeners implements KeyListener, Serializable {
             }
 
             if (e.getKeyCode() == KeyEvent.VK_B) {
-                if (createBoard.isOnline) {
+                if (creatingGameBoard.isOnline) {
                     try {
                         GameClient.client.send("#bomb$");
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
                 } else {
-                    createBoard.plantBomb();
+                    creatingGameBoard.plantBomb();
                 }
             }
             if (e.getKeyCode() == KeyEvent.VK_N) {
-                if (!createBoard.isOnline) {
-                    if (createBoard.player.bombControl && createBoard.player.isAlive) {
+                if (!creatingGameBoard.isOnline) {
+                    if (creatingGameBoard.player.bombControl && creatingGameBoard.player.isAlive) {
                         try {
-                            createBoard.bombCells.get(0).bombThread.explode();
+                            creatingGameBoard.player.bombCells.get(0).bombThread.explode();
                         } catch (InterruptedException e1) {
-                            e1.printStackTrace();
+                            System.out.println("No bomb to explode");
                         }
                     }
                 } else {
@@ -133,115 +133,85 @@ public class ActionListeners implements KeyListener, Serializable {
 
 
     private void goDown(int playerX, int playerY) throws IOException {
-        if (createBoard.isOnline) {
+        if (creatingGameBoard.isOnline) {
             sendNewPosition(playerX + 1, playerY);
         }
     }
 
     private void goUp(int playerX, int playerY) throws IOException {
-        if (createBoard.isOnline) {
+        if (creatingGameBoard.isOnline) {
             sendNewPosition(playerX - 1, playerY);
         }
     }
 
     private void goRight(int playerX, int playerY) throws IOException {
 
-        if (createBoard.isOnline) {
+        if (creatingGameBoard.isOnline) {
             sendNewPosition(playerX, playerY + 1);
         }
     }
 
     private void sendNewPosition(int playerNewPositionX, int playerNewPositionY) throws IOException {
 
-        if (createBoard.player.isAlive) {
-//            if (!createBoard.gameComponents[playerx][playery].type.equals("bomb")) {
-//                createBoard.gameComponents[playerx][playery] = new FieldCell();
-//            }
-            // createBoard.player.bombSet = false;
+        if (creatingGameBoard.player.isAlive) {
 
-            //  createBoard.player.currentBomb = null;
             GameClient.client.send("#playerX$" + playerNewPositionX);
             GameClient.client.send("#playerY$" + playerNewPositionY);
-
-            //  createBoard.gameComponents[createBoard.player.playerPositionX][createBoard.player.playerPositionY] = createBoard.player;
-            //  createBoard.createFrame();
         }
     }
 
     private void goLeft(int playerX, int playerY) throws IOException {
-        if (createBoard.isOnline) {
+        if (creatingGameBoard.isOnline) {
             sendNewPosition(playerX, playerY - 1);
         }
     }
 
     private void moveOffline(int playerX, int playerY) {
-        GameComponent cell = createBoard.gameComponents[playerX][playerY];
-//        currentLocation(playerX,playerY);
-//        nextLocation(playerX,playerY);
+        GameComponent cell = creatingGameBoard.gameComponents[playerX][playerY];
+
         if (cell.passable) {
 
-            updateContentPane(createBoard.player.playerPositionX, createBoard.player.playerPositionY);
+            updateContentPane(creatingGameBoard.player.playerPositionX, creatingGameBoard.player.playerPositionY);
 
 
-            createBoard.gameComponents[playerX][playerY] = createBoard.player;
-            createBoard.player.playerPositionY = playerY;
-            createBoard.player.playerPositionX = playerX;
+            creatingGameBoard.gameComponents[playerX][playerY] = creatingGameBoard.player;
+            creatingGameBoard.player.playerPositionY = playerY;
+            creatingGameBoard.player.playerPositionX = playerX;
         }
         if (cell instanceof StatChanger) {
-            updateContentPane(createBoard.player.playerPositionX, createBoard.player.playerPositionY);
+            updateContentPane(creatingGameBoard.player.playerPositionX, creatingGameBoard.player.playerPositionY);
 
-            createBoard.checkIfIsStatChanger(cell);
-            createBoard.labels[playerX][playerY].setText("");
-            createBoard.gameComponents[playerX][playerY] = createBoard.player;
-            createBoard.player.playerPositionY = playerY;
-            createBoard.player.playerPositionX = playerX;
+            creatingGameBoard.checkIfIsStatChanger(cell);
+            creatingGameBoard.labels[playerX][playerY].setText("");
+            creatingGameBoard.gameComponents[playerX][playerY] = creatingGameBoard.player;
+            creatingGameBoard.player.playerPositionY = playerY;
+            creatingGameBoard.player.playerPositionX = playerX;
         }
 
         if (cell.type.equals("door")) {
-            if (createBoard.checkIfPassable()) {
-                createBoard.goToNextLevel();
+            if (creatingGameBoard.checkIfICanGoToNextLevel()) {
+                creatingGameBoard.goToNextLevel();
             }
         }
 
 
-        createBoard.createFrame();
+        creatingGameBoard.createFrame();
 
 
     }
 
     private void updateContentPane(int playerx, int playery) {
 
-        if (createBoard.player.isAlive) {
-            if (!createBoard.gameComponents[playerx][playery].type.equals("bomb")) {
-                createBoard.gameComponents[playerx][playery] = new FieldCell();
+        if (creatingGameBoard.player.isAlive) {
+            if (!creatingGameBoard.gameComponents[playerx][playery].type.equals("bomb")) {
+                creatingGameBoard.gameComponents[playerx][playery] = new FieldCell();
             }
-            createBoard.player.bombSet = false;
+            creatingGameBoard.player.bombSet = false;
 
-            createBoard.player.currentBomb = null;
+            creatingGameBoard.player.currentBomb = null;
         }
     }
 
-    private void currentLocation(int i, int j) {
-        if (!createBoard.gameComponents[i][j].neverPassable) {
-
-            createBoard.player.disappearedObject = (Cell) createBoard.gameComponents[i][j];
-            createBoard.player.isGhosting = true;
-        }
-    }
-
-    private void nextLocation(int i, int j) {
-        if (createBoard.player.isGhosting) {
-            createBoard.player.isGhosting = false;
-            createBoard.player.disappearedObject.passable = false;
-
-            createBoard.setGameComponents(i, j, createBoard.player.disappearedObject);
-            createBoard.gameComponents[i][j].passable = false;
-            createBoard.player.disappearedObject = null;
-
-        } else {
-            createBoard.setGameComponents(i, j, new FieldCell());
-        }
-    }
 
 
 }

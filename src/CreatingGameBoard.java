@@ -7,7 +7,7 @@ import java.time.Instant;
 import java.util.*;
 import java.util.Timer;
 
-public class CreateBoard extends JFrame implements Serializable {
+public class CreatingGameBoard extends JFrame implements Serializable {
 
     int width;
     int height;
@@ -24,7 +24,6 @@ public class CreateBoard extends JFrame implements Serializable {
     private int obstacle;
     static final int obstacleScore = 10;
     static int points = 0;
-    static int bombRadius = 1;
     static long bombExplosionTime = 5;
     private ActionListeners listeners;
     private MainFrameGraphics graphics = new MainFrameGraphics(this);
@@ -33,32 +32,29 @@ public class CreateBoard extends JFrame implements Serializable {
     private Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
     static Player player = null;
     private int dimension;
-    static int bombNum = 1;
-    static CreateBoard createBoard;
-    int bombCount = 0;
+   // static int bombNum = 1;
+    static CreatingGameBoard creatingGameBoard;
+  //  int bombCount = 0;
     private int level;
     private boolean isMoving = false;
-    ArrayList<BombCell> bombCells = new ArrayList<>();
     ArrayList<Enemy> enemies = new ArrayList<>();
     private ImageIcon imageIcon = null;
     Date date;
     boolean isOnline = false;
 
-    public CreateBoard(GameManager gameManager, int w, int h, GameComponent[][] gameComponents, Player player, int bombNum, boolean isOnline) {
+    public CreatingGameBoard(GameManager gameManager, int w, int h, GameComponent[][] gameComponents, Player player, boolean isOnline) {
 
         this.width = w;
         this.height = h;
         this.gameComponents = gameComponents;
         this.obstacle = gameManager.getObstacleCount();
         this.dimension = gameManager.getDimension();
-        this.bombNum = bombNum;
-        CreateBoard.createBoard = this;
+        CreatingGameBoard.creatingGameBoard = this;
         this.isOnline = isOnline;
-        CreateBoard.bombNum = gameManager.getBombLimit();
         if (!isOnline && this.gameTime == null) {
             this.gameTime = new Time(300);
         }
-        CreateBoard.points = gameManager.getPoints();
+        CreatingGameBoard.points = gameManager.getPoints();
         this.level = gameManager.getLevel();
         isMoving = false;
         date = Date.from(Instant.now());
@@ -67,7 +63,7 @@ public class CreateBoard extends JFrame implements Serializable {
 
         int realSizeWidth = dimension * (2 + w);
         int realSizeHeight = dimension * (2 + h);
-        this.createBoard = this;
+        this.creatingGameBoard = this;
         this.gameManager = gameManager;
         //addKeyListenerToFrame();
         labels = new JLabel[width + 2][height + 2];
@@ -122,8 +118,9 @@ public class CreateBoard extends JFrame implements Serializable {
                     player.playerPositionX = 1;
                 } else if (i == 0 || j == 0 || i == w + 1 || j == h + 1) {
 
-
-                    gameComponent = new WallCell();
+                    WallCell wallCell=new WallCell();
+                    gameComponent = wallCell;
+                    wallCell.neverPassable=true;
                 } else if (i % 2 == 0 && j % 2 == 0) {
                     gameComponent = new WallCell();
                 } else {
@@ -140,13 +137,13 @@ public class CreateBoard extends JFrame implements Serializable {
 
     private void createRandomEnemies(int width, int height) {
 
-        int enemyNum = Math.min(width, height) / 2 - 5;
+        int enemyNum = Math.min(width, height) / 2 ;
         enemyCount = enemyNum;
         for (int i = 0; i < enemyNum; ) {
             Random r = new Random();
             int n = r.nextInt(width - 1) + 1;
             int m = r.nextInt(height - 1) + 1;
-            if (gameComponents[n][m].type == "field") {
+            if (gameComponents[n][m].type .equals( "field")) {
 
                 if (n != 2 && m != 2) {
                     i++;
@@ -333,11 +330,11 @@ public class CreateBoard extends JFrame implements Serializable {
     }
 
     void plantBomb() {
-        if (bombCount <= bombNum && !player.bombSet) {
-            bombCount++;
+        if (player.bombCount <= player.bombNum && !player.bombSet) {
+            player.bombCount++;
             player.bombSet = true;
-            BombCell bomb = new BombCell(bombRadius, bombExplosionTime, this, player.playerPositionX, player.playerPositionY);
-            bombCells.add(bomb);
+            BombCell bomb = new BombCell(player.bombRadius, bombExplosionTime, this, player.playerPositionX, player.playerPositionY);
+            player.bombCells.add(bomb);
             gameComponents[player.playerPositionX][player.playerPositionY] = bomb;
             player.currentBomb = bomb;
 
@@ -391,7 +388,7 @@ public class CreateBoard extends JFrame implements Serializable {
         graphics.score.setText(score);
     }
 
-    boolean checkIfPassable() {
+    boolean checkIfICanGoToNextLevel() {
         if (enemyCount == 0) {
             return true;
         }
@@ -402,8 +399,8 @@ public class CreateBoard extends JFrame implements Serializable {
         player.playerPositionX = 1;
         player.playerPositionY = 1;
         gameManager.player = player;
-        bombCount = 0;
-        gameManager.setPoints(CreateBoard.points);
+        player.bombCount = 0;
+        gameManager.setPoints(CreatingGameBoard.points);
 
         gameManager.goToNextLevel(this);
 

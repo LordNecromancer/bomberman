@@ -7,13 +7,13 @@ public class IncreasePoints extends PowerUps implements Serializable {
     final private String type = "increasePoints";
     private static final long serialVersionUID = 1113799434508316969L;
 
-    CreateBoard createBoard;
+    CreatingGameBoard creatingGameBoard;
 
     public IncreasePoints() {
         super.type = type;
     }
 
     public void doYourThing() {
-        CreateBoard.createBoard.addScore(100);
+        CreatingGameBoard.creatingGameBoard.addScore(100);
     }
 }

@@ -14,7 +14,7 @@ public class IncreaseBombs extends PowerUps implements Serializable {
     }
 
     public void doYourThing() {
-        CreateBoard.bombNum = CreateBoard.bombNum + 1;
+        CreatingGameBoard.player.bombNum = CreatingGameBoard.player.bombNum + 1;
     }
 
 }

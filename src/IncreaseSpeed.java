@@ -7,14 +7,14 @@ public class IncreaseSpeed extends PowerUps implements Serializable {
     final private String type = "increaseSpeed";
     private static final long serialVersionUID = 1113799434508336969L;
 
-    CreateBoard createBoard;
+    CreatingGameBoard creatingGameBoard;
 
     public IncreaseSpeed() {
         super.type = type;
     }
 
     public void doYourThing() {
-        if (CreateBoard.player.playerSpeed > 0)
-            CreateBoard.player.playerSpeed--;
+        if (CreatingGameBoard.player.playerSpeed > 0)
+            CreatingGameBoard.player.playerSpeed--;
     }
 }
