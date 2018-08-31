@@ -26,7 +26,7 @@ public class CreatingOrJoiningGameRoom extends JFrame {
     private int heightEntered;
     private GameClient client;
     private boolean isStarted = false;
-    private SetUpGraphics graphics = new SetUpGraphics(width, height);
+    private SettingUpGraphics graphics = new SettingUpGraphics(width, height);
 
     public CreatingOrJoiningGameRoom(GameClient client) throws IOException {
         this.client = client;

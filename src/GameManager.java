@@ -12,7 +12,7 @@ public class GameManager implements Serializable {
 
 
     private int dimension = 50;
-    private int bombExplosionTime=5;
+    private int bombExplosionTime = 5;
     final private Time gameTime = new Time(300);
     private int obstacleCount;
     private int boardWidth;
@@ -226,7 +226,7 @@ public class GameManager implements Serializable {
         preparedStatement.setInt(7, CreatingGameBoard.player.bombCount);
         preparedStatement.setInt(8, (int) creatingGameBoard.gameTime.getTime());
         preparedStatement.setInt(9, creatingGameBoard.points);
-        preparedStatement.setInt(10,creatingGameBoard.player.bombRadius);
+        preparedStatement.setInt(10, creatingGameBoard.player.bombRadius);
 
 
         preparedStatement.execute();
@@ -299,10 +299,10 @@ public class GameManager implements Serializable {
             int bombCount = 0;
             int gameTime = 0;
             int score = 0;
-            int bombRadius=1;
-            ArrayList<Integer> bombsX=new ArrayList<>();
-            ArrayList<Integer> bombsY=new ArrayList<>();
-            ArrayList<Enemy> enemies=new ArrayList<>();
+            int bombRadius = 1;
+            ArrayList<Integer> bombsX = new ArrayList<>();
+            ArrayList<Integer> bombsY = new ArrayList<>();
+            ArrayList<Enemy> enemies = new ArrayList<>();
 
 
             ResultSet result = statement.executeQuery("select * from bombermantest WHERE gameName='" + name + "'");
@@ -327,8 +327,7 @@ public class GameManager implements Serializable {
                 bombCount = result.getInt("bombCount");
                 gameTime = result.getInt("gameTime");
                 score = result.getInt("score");
-                bombRadius=result.getInt("bombRadius");
-
+                bombRadius = result.getInt("bombRadius");
 
 
             }
@@ -336,7 +335,7 @@ public class GameManager implements Serializable {
             player.isAlive = isAlive;
             player.bombControl = bombControl;
             player.playerSpeed = playerSpeed;
-            player.bombRadius=bombRadius;
+            player.bombRadius = bombRadius;
             player.bombCount = bombCount;
             player.bombNum = bombNum;
 
@@ -347,12 +346,12 @@ public class GameManager implements Serializable {
                 int YComponent = result.getInt("YComponent");
 
                 if (!className.equals("Player") && !className.equals("BombCell")) {
-                    GameComponent gameComponent=(GameComponent) Class.forName(className).newInstance();
+                    GameComponent gameComponent = (GameComponent) Class.forName(className).newInstance();
                     gameComponents[XComponent][YComponent] = gameComponent;
-                    if(gameComponent instanceof Enemy){
-                        enemies.add((Enemy)gameComponent);
+                    if (gameComponent instanceof Enemy) {
+                        enemies.add((Enemy) gameComponent);
                     }
-                }else if(className.equals("BombCell")){
+                } else if (className.equals("BombCell")) {
                     bombsX.add(XComponent);
                     bombsY.add(YComponent);
 
@@ -371,20 +370,20 @@ public class GameManager implements Serializable {
             for (int i = 0; i < enemies.size(); i++) {
                 gameManager.creatingGameBoard.enemies.add(enemies.get(i));
             }
-            for (int i = 0; i <bombsX.size() ; i++) {
-               // String className = resultSet.getString("objectName");
+            for (int i = 0; i < bombsX.size(); i++) {
+                // String className = resultSet.getString("objectName");
                 int XComponent = bombsX.get(i);
                 int YComponent = bombsY.get(i);
-                BombCell bombCell=new BombCell(player.bombRadius,gameManager.bombExplosionTime,gameManager.creatingGameBoard,XComponent,YComponent);
-                gameComponents[XComponent][YComponent] =bombCell;
+                BombCell bombCell = new BombCell(player.bombRadius, gameManager.bombExplosionTime, gameManager.creatingGameBoard, XComponent, YComponent);
+                gameComponents[XComponent][YComponent] = bombCell;
                 player.bombCells.add(bombCell);
-                if(i==0){
-                    player.currentBomb=bombCell;
+                if (i == 0) {
+                    player.currentBomb = bombCell;
                 }
 
 
             }
-            gameManager.creatingGameBoard.gameComponents=gameComponents;
+            gameManager.creatingGameBoard.gameComponents = gameComponents;
             gameManager.creatingGameBoard.gameTime = new Time(gameTime);
             gameManager.creatingGameBoard.points = score;
             gameManager.init();

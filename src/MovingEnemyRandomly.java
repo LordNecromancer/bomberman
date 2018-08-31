@@ -4,7 +4,7 @@ import java.util.ArrayList;
 /**
  * Created by Sun on 07/25/2018.
  */
-public class MoveEnemyRandomly implements Serializable {
+public class MovingEnemyRandomly implements Serializable {
     CreatingGameBoard creatingGameBoard;
 
     public synchronized void move(CreatingGameBoard creatingGameBoard, int i, int j, Enemy enemy, int randomNum, ArrayList<GameComponent> chooseDirection) {
@@ -31,11 +31,11 @@ public class MoveEnemyRandomly implements Serializable {
                     nextLocation(enemy, i - 1, j);
 
                 }
-                creatingGameBoard.gameComponents[i-1][j] = enemy;
+                creatingGameBoard.gameComponents[i - 1][j] = enemy;
 
 
             } else if (chooseDirection.get(randomNum) == right) {
-                if (right.passable&&!enemy.isGhosting) {
+                if (right.passable && !enemy.isGhosting) {
                     creatingGameBoard.gameComponents[i][j] = new FieldCell();
                 } else {
                     currentLocation(enemy, i, j);
@@ -47,7 +47,7 @@ public class MoveEnemyRandomly implements Serializable {
 
             } else if (chooseDirection.get(randomNum) == down) {
 
-                if (down.passable &&!enemy.isGhosting) {
+                if (down.passable && !enemy.isGhosting) {
                     creatingGameBoard.gameComponents[i][j] = new FieldCell();
                 } else {
                     currentLocation(enemy, i, j);
@@ -59,7 +59,7 @@ public class MoveEnemyRandomly implements Serializable {
 
             } else if (chooseDirection.get(randomNum) == left) {
 
-                if (left.passable &&!enemy.isGhosting) {
+                if (left.passable && !enemy.isGhosting) {
                     creatingGameBoard.gameComponents[i][j] = new FieldCell();
                 } else {
                     currentLocation(enemy, i, j);
@@ -84,9 +84,8 @@ public class MoveEnemyRandomly implements Serializable {
     private void currentLocation(Enemy enemy, int i, int j) {
 
 
-
-            creatingGameBoard.setGameComponents(i, j, enemy.disappearedObject);
-            enemy.disappearedObject = null;
+        creatingGameBoard.setGameComponents(i, j, enemy.disappearedObject);
+        enemy.disappearedObject = null;
 
 
     }

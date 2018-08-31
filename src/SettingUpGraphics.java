@@ -4,7 +4,7 @@ import java.awt.*;
 /**
  * Created by Sun on 08/11/2018.
  */
-public class SetUpGraphics {
+public class SettingUpGraphics {
     private int w = 400;
     private int h = 350;
     private int width;
@@ -12,7 +12,7 @@ public class SetUpGraphics {
     private int startingPointWidth = width / 2 - w / 2;
     private int startingPointHeight = height / 2 - h / 2;
 
-    public SetUpGraphics(int width, int height) {
+    public SettingUpGraphics(int width, int height) {
         this.width = width;
         this.height = height;
     }

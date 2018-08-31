@@ -32,9 +32,9 @@ public class CreatingGameBoard extends JFrame implements Serializable {
     private Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
     static Player player = null;
     private int dimension;
-   // static int bombNum = 1;
+    // static int bombNum = 1;
     static CreatingGameBoard creatingGameBoard;
-  //  int bombCount = 0;
+    //  int bombCount = 0;
     private int level;
     private boolean isMoving = false;
     ArrayList<Enemy> enemies = new ArrayList<>();
@@ -118,9 +118,9 @@ public class CreatingGameBoard extends JFrame implements Serializable {
                     player.playerPositionX = 1;
                 } else if (i == 0 || j == 0 || i == w + 1 || j == h + 1) {
 
-                    WallCell wallCell=new WallCell();
+                    WallCell wallCell = new WallCell();
                     gameComponent = wallCell;
-                    wallCell.neverPassable=true;
+                    wallCell.neverPassable = true;
                 } else if (i % 2 == 0 && j % 2 == 0) {
                     gameComponent = new WallCell();
                 } else {
@@ -137,13 +137,13 @@ public class CreatingGameBoard extends JFrame implements Serializable {
 
     private void createRandomEnemies(int width, int height) {
 
-        int enemyNum = Math.min(width, height) / 2 ;
+        int enemyNum = Math.min(width, height) / 2;
         enemyCount = enemyNum;
         for (int i = 0; i < enemyNum; ) {
             Random r = new Random();
             int n = r.nextInt(width - 1) + 1;
             int m = r.nextInt(height - 1) + 1;
-            if (gameComponents[n][m].type .equals( "field")) {
+            if (gameComponents[n][m].type.equals("field")) {
 
                 if (n != 2 && m != 2) {
                     i++;
@@ -201,10 +201,10 @@ public class CreatingGameBoard extends JFrame implements Serializable {
 
     private PowerUps getRandomPowerUp() {
         ArrayList<PowerUps> powerUps = new ArrayList<>();
-        powerUps.add(new IncreaseBombs());
-        powerUps.add(new IncreasePoints());
-        powerUps.add(new IncreaseRadius());
-        powerUps.add(new IncreaseSpeed());
+        powerUps.add(new IncreasingBombs());
+        powerUps.add(new IncreasingPoints());
+        powerUps.add(new IncreasingRadius());
+        powerUps.add(new IncreasingSpeed());
         powerUps.add(new BombControl());
         powerUps.add(new GhostAbility(this));
 
@@ -215,11 +215,11 @@ public class CreatingGameBoard extends JFrame implements Serializable {
 
     private Poison getRandomPoison() {
         ArrayList<Poison> poisons = new ArrayList<>();
-        poisons.add(new DecreaseBombs());
-        poisons.add(new DecreasePoints());
-        poisons.add(new DecreaseRadius());
-        poisons.add(new DecreaseSpeed());
-        poisons.add(new LoseBombControl());
+        poisons.add(new DecreasingBombs());
+        poisons.add(new DecreasingPoints());
+        poisons.add(new DecreasingRadius());
+        poisons.add(new DecreasingSpeed());
+        poisons.add(new LosingBombControl());
 
         Random r = new Random();
         int m = r.nextInt(poisons.size() - 1);

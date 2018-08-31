@@ -3,12 +3,12 @@ import java.io.Serializable;
 /**
  * Created by Sun on 06/24/2018.
  */
-public class LoseBombControl extends Poison implements Serializable {
+public class LosingBombControl extends Poison implements Serializable {
     final private String type = "loseBombControl";
     private static final long serialVersionUID = 1113799434508346969L;
 
 
-    public LoseBombControl() {
+    public LosingBombControl() {
 
         super.type = type;
     }
