@@ -4,18 +4,18 @@ import java.io.Serializable;
  * Created by Sun on 08/23/2018.
  */
 public class GhostAbility extends PowerUps implements Serializable {
-    CreatingGameBoard creatingGameBoard;
+    GameBoardCreator gameBoardCreator;
     final private String type = "ghostAbility";
 
 
-    public GhostAbility(CreatingGameBoard creatingGameBoard) {
-        this.creatingGameBoard = creatingGameBoard;
-        super.type = type;
+    public GhostAbility(GameBoardCreator gameBoardCreator) {
+        this.gameBoardCreator = gameBoardCreator;
+        super.setType(type);
     }
 
     @Override
     public void doYourThing() {
 
-        creatingGameBoard.player.isGhosting = true;
+        gameBoardCreator.player.setGhosting(true);
     }
 }

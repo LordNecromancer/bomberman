@@ -10,10 +10,10 @@ public class LosingBombControl extends Poison implements Serializable {
 
     public LosingBombControl() {
 
-        super.type = type;
+        super.setType(type);
     }
 
     public void doYourThing() {
-        CreatingGameBoard.player.bombControl = false;
+        GameBoardCreator.player.setBombControl(false);
     }
 }

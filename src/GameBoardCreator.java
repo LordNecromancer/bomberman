@@ -7,54 +7,54 @@ import java.time.Instant;
 import java.util.*;
 import java.util.Timer;
 
-public class CreatingGameBoard extends JFrame implements Serializable {
+public class GameBoardCreator extends JFrame implements Serializable {
 
     int width;
     int height;
-    int enemyCount;
+    private int enemyCount;
     private static final long serialVersionUID = 1113799434508676095L;
 
-    GameManager gameManager;
+    private GameManager gameManager;
     GameComponent[][] gameComponents;
-    public JLabel[][] labels;
-    ArrayList<ObstacleCell> obstacleArray = new ArrayList<>();
+    JLabel[][] labels;
+    private ArrayList<ObstacleCell> obstacleArray = new ArrayList<>();
 
-    Time gameTime;
+    private Time gameTime;
 
     private int obstacle;
-    static final int obstacleScore = 10;
+    private static final int obstacleScore = 10;
     static int points = 0;
-    static long bombExplosionTime = 5;
+    private static long bombExplosionTime = 5;
     private ActionListeners listeners;
     private MainFrameGraphics graphics = new MainFrameGraphics(this);
-    EnemyMovementThread enemyMove = new EnemyMovementThread(this);
-    EnemyMovementThreadTypeTwo enemyMove2 = new EnemyMovementThreadTypeTwo(this);
+    private EnemyMovementThread enemyMove = new EnemyMovementThread(this);
+    private EnemyMovementThreadTypeTwo enemyMove2 = new EnemyMovementThreadTypeTwo(this);
     private Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
     static Player player = null;
     private int dimension;
     // static int bombNum = 1;
-    static CreatingGameBoard creatingGameBoard;
+    static GameBoardCreator gameBoardCreator;
     //  int bombCount = 0;
     private int level;
     private boolean isMoving = false;
-    ArrayList<Enemy> enemies = new ArrayList<>();
+    private ArrayList<Enemy> enemies = new ArrayList<>();
     private ImageIcon imageIcon = null;
-    Date date;
-    boolean isOnline = false;
+    private Date date;
+    private boolean isOnline = false;
 
-    public CreatingGameBoard(GameManager gameManager, int w, int h, GameComponent[][] gameComponents, Player player, boolean isOnline) {
+    public GameBoardCreator(GameManager gameManager, int w, int h, GameComponent[][] gameComponents, Player player, boolean isOnline) {
 
         this.width = w;
         this.height = h;
         this.gameComponents = gameComponents;
         this.obstacle = gameManager.getObstacleCount();
         this.dimension = gameManager.getDimension();
-        CreatingGameBoard.creatingGameBoard = this;
+        GameBoardCreator.gameBoardCreator = this;
         this.isOnline = isOnline;
         if (!isOnline && this.gameTime == null) {
             this.gameTime = new Time(300);
         }
-        CreatingGameBoard.points = gameManager.getPoints();
+        GameBoardCreator.points = gameManager.getPoints();
         this.level = gameManager.getLevel();
         isMoving = false;
         date = Date.from(Instant.now());
@@ -63,12 +63,20 @@ public class CreatingGameBoard extends JFrame implements Serializable {
 
         int realSizeWidth = dimension * (2 + w);
         int realSizeHeight = dimension * (2 + h);
-        this.creatingGameBoard = this;
+        this.gameBoardCreator = this;
         this.gameManager = gameManager;
         //addKeyListenerToFrame();
         labels = new JLabel[width + 2][height + 2];
         listeners = new ActionListeners(this);
         graphics.crateGameFrame(w, h, realSizeWidth, realSizeHeight);
+    }
+
+    public static int getObstacleScore() {
+        return obstacleScore;
+    }
+
+    public static void setBombExplosionTime(long bombExplosionTime) {
+        GameBoardCreator.bombExplosionTime = bombExplosionTime;
     }
 
 
@@ -95,7 +103,7 @@ public class CreatingGameBoard extends JFrame implements Serializable {
             for (int j = 0; j < height + 2; j++) {
                 labels[i][j] = new JLabel(imageIcon);
                 labels[i][j].setBorder(border);
-                graphics.center.add(labels[i][j]);
+                graphics.getCenter().add(labels[i][j]);
             }
         }
     }
@@ -114,13 +122,13 @@ public class CreatingGameBoard extends JFrame implements Serializable {
                         player = new Player("");
                     }
                     gameComponent = player;
-                    player.playerPositionY = 1;
-                    player.playerPositionX = 1;
+                    player.setPlayerPositionY(1);
+                    player.setPlayerPositionX(1);
                 } else if (i == 0 || j == 0 || i == w + 1 || j == h + 1) {
 
                     WallCell wallCell = new WallCell();
                     gameComponent = wallCell;
-                    wallCell.neverPassable = true;
+                    wallCell.setNeverPassable(true);
                 } else if (i % 2 == 0 && j % 2 == 0) {
                     gameComponent = new WallCell();
                 } else {
@@ -143,7 +151,7 @@ public class CreatingGameBoard extends JFrame implements Serializable {
             Random r = new Random();
             int n = r.nextInt(width - 1) + 1;
             int m = r.nextInt(height - 1) + 1;
-            if (gameComponents[n][m].type.equals("field")) {
+            if (gameComponents[n][m].getType().equals("field")) {
 
                 if (n != 2 && m != 2) {
                     i++;
@@ -182,7 +190,7 @@ public class CreatingGameBoard extends JFrame implements Serializable {
             Random r = new Random();
             int n = r.nextInt(w - 1) + 1;
             int m = r.nextInt(h - 1) + 1;
-            if (gameComponents[n][m].type.equals("field")) {
+            if (gameComponents[n][m].getType().equals("field")) {
 
                 if (n != 2 && m != 2) {
                     k++;
@@ -201,10 +209,10 @@ public class CreatingGameBoard extends JFrame implements Serializable {
 
     private PowerUps getRandomPowerUp() {
         ArrayList<PowerUps> powerUps = new ArrayList<>();
-        powerUps.add(new IncreasingBombs());
-        powerUps.add(new IncreasingPoints());
-        powerUps.add(new IncreasingRadius());
-        powerUps.add(new IncreasingSpeed());
+        powerUps.add(new IncreasingBombsPowerUp());
+        powerUps.add(new IncreasingPointsPowerUp());
+        powerUps.add(new IncreasingRadiusPowerUp());
+        powerUps.add(new IncreasingSpeedPowerUp());
         powerUps.add(new BombControl());
         powerUps.add(new GhostAbility(this));
 
@@ -215,10 +223,10 @@ public class CreatingGameBoard extends JFrame implements Serializable {
 
     private Poison getRandomPoison() {
         ArrayList<Poison> poisons = new ArrayList<>();
-        poisons.add(new DecreasingBombs());
-        poisons.add(new DecreasingPoints());
-        poisons.add(new DecreasingRadius());
-        poisons.add(new DecreasingSpeed());
+        poisons.add(new DecreasingBombsPoison());
+        poisons.add(new DecreasingPointsPoison());
+        poisons.add(new DecreasingRadiusPoison());
+        poisons.add(new DecreasingSpeedPoison());
         poisons.add(new LosingBombControl());
 
         Random r = new Random();
@@ -290,7 +298,7 @@ public class CreatingGameBoard extends JFrame implements Serializable {
 
                 u++;
             }
-            graphics.center.repaint();
+            graphics.getCenter().repaint();
             if (!isOnline) {
                 if (!isMoving) {
                     setTimer();
@@ -310,7 +318,7 @@ public class CreatingGameBoard extends JFrame implements Serializable {
 
         enemyMove.stop();
         enemyMove2.stop();
-        gameComponents[player.playerPositionX][player.playerPositionY] = new FieldCell();
+        gameComponents[player.getPlayerPositionX()][player.getPlayerPositionY()] = new FieldCell();
         this.dispose();
 
         createFrame();
@@ -319,28 +327,16 @@ public class CreatingGameBoard extends JFrame implements Serializable {
 
 
     boolean isPassed() {
-        return Date.from(Instant.now()).getTime() - date.getTime() > player.playerSpeed * 100;
+        return Date.from(Instant.now()).getTime() - date.getTime() > player.getPlayerSpeed() * 100;
     }
 
     void checkIfIsStatChanger(GameComponent cell) {
 
         StatChanger statChanger = (StatChanger) cell;
-        statChanger.passable = true;
+        statChanger.setPassable(true);
         statChanger.doYourThing();
     }
 
-    void plantBomb() {
-        if (player.bombCount <= player.bombNum && !player.bombSet) {
-            player.bombCount++;
-            player.bombSet = true;
-            BombCell bomb = new BombCell(player.bombRadius, bombExplosionTime, this, player.playerPositionX, player.playerPositionY);
-            player.bombCells.add(bomb);
-            gameComponents[player.playerPositionX][player.playerPositionY] = bomb;
-            player.currentBomb = bomb;
-
-            createFrame();
-        }
-    }
 
     void addScore(int score) {
         System.out.println(score);
@@ -380,12 +376,12 @@ public class CreatingGameBoard extends JFrame implements Serializable {
 
     void refreshTimer(long time) {
 
-        graphics.time.setText(Integer.toString((int) time / 60) + "  :  " + (int) time % 60);
+        graphics.getTime().setText(Integer.toString((int) time / 60) + "  :  " + (int) time % 60);
     }
 
     void refreshScore(String score) {
 
-        graphics.score.setText(score);
+        graphics.getScore().setText(score);
     }
 
     boolean checkIfICanGoToNextLevel() {
@@ -396,14 +392,106 @@ public class CreatingGameBoard extends JFrame implements Serializable {
     }
 
     void goToNextLevel() {
-        player.playerPositionX = 1;
-        player.playerPositionY = 1;
+        player.setPlayerPositionX(1);
+        player.setPlayerPositionY(1);
         gameManager.player = player;
-        player.bombCount = 0;
-        gameManager.setPoints(CreatingGameBoard.points);
+        player.setBombCount(0);
+        gameManager.setPoints(GameBoardCreator.points);
 
         gameManager.goToNextLevel(this);
 
         this.dispose();
+    }
+
+    public static long getBombExplosionTime() {
+        return bombExplosionTime;
+    }
+
+    public int getEnemyCount() {
+        return enemyCount;
+    }
+
+    public void setEnemyCount(int enemyCount) {
+        this.enemyCount = enemyCount;
+    }
+
+    public Time getGameTime() {
+        return gameTime;
+    }
+
+    public void setGameTime(Time gameTime) {
+        this.gameTime = gameTime;
+    }
+
+    public GameManager getGameManager() {
+        return gameManager;
+    }
+
+    public void setGameManager(GameManager gameManager) {
+        this.gameManager = gameManager;
+    }
+
+    public ArrayList<ObstacleCell> getObstacleArray() {
+        return obstacleArray;
+    }
+
+    public void setObstacleArray(ArrayList<ObstacleCell> obstacleArray) {
+        this.obstacleArray = obstacleArray;
+    }
+
+    public int getObstacle() {
+        return obstacle;
+    }
+
+    public void setObstacle(int obstacle) {
+        this.obstacle = obstacle;
+    }
+
+    public ActionListeners getListeners() {
+        return listeners;
+    }
+
+    public void setListeners(ActionListeners listeners) {
+        this.listeners = listeners;
+    }
+
+    public EnemyMovementThread getEnemyMove() {
+        return enemyMove;
+    }
+
+    public void setEnemyMove(EnemyMovementThread enemyMove) {
+        this.enemyMove = enemyMove;
+    }
+
+    public EnemyMovementThreadTypeTwo getEnemyMove2() {
+        return enemyMove2;
+    }
+
+    public void setEnemyMove2(EnemyMovementThreadTypeTwo enemyMove2) {
+        this.enemyMove2 = enemyMove2;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public boolean isOnline() {
+        return isOnline;
+    }
+
+    public void setOnline(boolean online) {
+        isOnline = online;
+    }
+
+    public ArrayList<Enemy> getEnemies() {
+        return enemies;
+    }
+
+    public void setEnemies(ArrayList<Enemy> enemies) {
+        this.enemies = enemies;
     }
 }

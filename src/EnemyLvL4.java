@@ -5,18 +5,19 @@ import java.io.Serializable;
  */
 public class EnemyLvL4 extends Enemy implements Serializable {
     final private String type = "enemyLvL4";
-    int level = 4;
+    private int level = 4;
     static int sleep = 4;
-    boolean isGhosting = true;
-    GameComponent disappearedObject = new FieldCell();
+    private boolean isGhosting = true;
+    private GameComponent disappearedObject = new FieldCell();
 
     public EnemyLvL4() {
-        super.level = level;
-        super.type = type;
-        super.isGhosting = isGhosting;
-        super.disappearedObject = disappearedObject;
-        super.passable = false;
-        super.neverPassable = true;
+        super.setLevel(level);
+        super.setType(type);
+        super.setSleep(sleep);
+        super.setGhosting(isGhosting);
+        super.setDisappearedObject(disappearedObject);
+        super.setPassable(false);
+        super.setNeverPassable(true);
 
 
     }

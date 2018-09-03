@@ -7,10 +7,10 @@ import java.util.Date;
 
 
 public class ActionListeners implements KeyListener, Serializable {
-    CreatingGameBoard creatingGameBoard;
+    GameBoardCreator gameBoardCreator;
 
-    public ActionListeners(CreatingGameBoard creatingGameBoard) {
-        this.creatingGameBoard = creatingGameBoard;
+    public ActionListeners(GameBoardCreator gameBoardCreator) {
+        this.gameBoardCreator = gameBoardCreator;
 
     }
 
@@ -32,30 +32,30 @@ public class ActionListeners implements KeyListener, Serializable {
          */
 
 
-        if (!creatingGameBoard.isOnline) {
+        if (!gameBoardCreator.isOnline()) {
             if ((e.getKeyCode() == KeyEvent.VK_S) && (e.getModifiers() & KeyEvent.CTRL_MASK) != 0) {
 
-                GameManager.saveFile(creatingGameBoard);
+                GameManager.saveFile(gameBoardCreator);
             }
 
             if ((e.getKeyCode() == KeyEvent.VK_O) && (e.getModifiers() & KeyEvent.CTRL_MASK) != 0) {
 
                 GameManager.load();
-                creatingGameBoard.dispose();
+                gameBoardCreator.dispose();
             }
         }
 
-        int playerx = creatingGameBoard.player.playerPositionX;
-        int playery = creatingGameBoard.player.playerPositionY;
-        if (creatingGameBoard.player.isAlive) {
-            if (creatingGameBoard.isPassed()) {
+        int playerx = gameBoardCreator.player.getPlayerPositionX();
+        int playery = gameBoardCreator.player.getPlayerPositionY();
+        if (gameBoardCreator.player.isAlive()) {
+            if (gameBoardCreator.isPassed()) {
                 try {
-                    creatingGameBoard.date = Date.from(Instant.now());
+                    gameBoardCreator.setDate(Date.from(Instant.now()));
 
                     if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 
 
-                        if (creatingGameBoard.isOnline) {
+                        if (gameBoardCreator.isOnline()) {
                             goDown(playerx, playery);
                         } else {
                             moveOffline(playerx + 1, playery);
@@ -65,7 +65,7 @@ public class ActionListeners implements KeyListener, Serializable {
                     if (e.getKeyCode() == KeyEvent.VK_UP) {
 
 
-                        if (creatingGameBoard.isOnline) {
+                        if (gameBoardCreator.isOnline()) {
                             goUp(playerx, playery);
                         } else {
                             moveOffline(playerx - 1, playery);
@@ -74,7 +74,7 @@ public class ActionListeners implements KeyListener, Serializable {
 
 
                     if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                        if (creatingGameBoard.isOnline) {
+                        if (gameBoardCreator.isOnline()) {
                             goRight(playerx, playery);
                         } else {
                             moveOffline(playerx, playery + 1);
@@ -84,7 +84,7 @@ public class ActionListeners implements KeyListener, Serializable {
 
                     if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 
-                        if (creatingGameBoard.isOnline) {
+                        if (gameBoardCreator.isOnline()) {
                             goLeft(playerx, playery);
                         } else {
                             moveOffline(playerx, playery - 1);
@@ -96,21 +96,21 @@ public class ActionListeners implements KeyListener, Serializable {
             }
 
             if (e.getKeyCode() == KeyEvent.VK_B) {
-                if (creatingGameBoard.isOnline) {
+                if (gameBoardCreator.isOnline()) {
                     try {
                         GameClient.client.send("#bomb$");
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
                 } else {
-                    creatingGameBoard.plantBomb();
+                    GameBoardCreator.player.plantBomb();
                 }
             }
             if (e.getKeyCode() == KeyEvent.VK_N) {
-                if (!creatingGameBoard.isOnline) {
-                    if (creatingGameBoard.player.bombControl && creatingGameBoard.player.isAlive) {
+                if (!gameBoardCreator.isOnline()) {
+                    if (gameBoardCreator.player.isBombControl() && gameBoardCreator.player.isAlive()) {
                         try {
-                            creatingGameBoard.player.bombCells.get(0).bombThread.explode();
+                            gameBoardCreator.player.getBombCells().get(0).getBombThread().explode();
                         } catch (InterruptedException e1) {
                             System.out.println("No bomb to explode");
                         }
@@ -133,27 +133,27 @@ public class ActionListeners implements KeyListener, Serializable {
 
 
     private void goDown(int playerX, int playerY) throws IOException {
-        if (creatingGameBoard.isOnline) {
+        if (gameBoardCreator.isOnline()) {
             sendNewPosition(playerX + 1, playerY);
         }
     }
 
     private void goUp(int playerX, int playerY) throws IOException {
-        if (creatingGameBoard.isOnline) {
+        if (gameBoardCreator.isOnline()) {
             sendNewPosition(playerX - 1, playerY);
         }
     }
 
     private void goRight(int playerX, int playerY) throws IOException {
 
-        if (creatingGameBoard.isOnline) {
+        if (gameBoardCreator.isOnline()) {
             sendNewPosition(playerX, playerY + 1);
         }
     }
 
     private void sendNewPosition(int playerNewPositionX, int playerNewPositionY) throws IOException {
 
-        if (creatingGameBoard.player.isAlive) {
+        if (gameBoardCreator.player.isAlive()) {
 
             GameClient.client.send("#playerX$" + playerNewPositionX);
             GameClient.client.send("#playerY$" + playerNewPositionY);
@@ -161,54 +161,54 @@ public class ActionListeners implements KeyListener, Serializable {
     }
 
     private void goLeft(int playerX, int playerY) throws IOException {
-        if (creatingGameBoard.isOnline) {
+        if (gameBoardCreator.isOnline()) {
             sendNewPosition(playerX, playerY - 1);
         }
     }
 
     private void moveOffline(int playerX, int playerY) {
-        GameComponent cell = creatingGameBoard.gameComponents[playerX][playerY];
+        GameComponent cell = gameBoardCreator.gameComponents[playerX][playerY];
 
-        if (cell.passable) {
+        if (cell.getPassable()) {
 
-            updateContentPane(creatingGameBoard.player.playerPositionX, creatingGameBoard.player.playerPositionY);
+            updateContentPane(gameBoardCreator.player.getPlayerPositionX(), gameBoardCreator.player.getPlayerPositionY());
 
 
-            creatingGameBoard.gameComponents[playerX][playerY] = creatingGameBoard.player;
-            creatingGameBoard.player.playerPositionY = playerY;
-            creatingGameBoard.player.playerPositionX = playerX;
+            gameBoardCreator.gameComponents[playerX][playerY] = gameBoardCreator.player;
+            gameBoardCreator.player.setPlayerPositionY(playerY);
+            gameBoardCreator.player.setPlayerPositionX(playerX);
         }
         if (cell instanceof StatChanger) {
-            updateContentPane(creatingGameBoard.player.playerPositionX, creatingGameBoard.player.playerPositionY);
+            updateContentPane(gameBoardCreator.player.getPlayerPositionX(), gameBoardCreator.player.getPlayerPositionY());
 
-            creatingGameBoard.checkIfIsStatChanger(cell);
-            creatingGameBoard.labels[playerX][playerY].setText("");
-            creatingGameBoard.gameComponents[playerX][playerY] = creatingGameBoard.player;
-            creatingGameBoard.player.playerPositionY = playerY;
-            creatingGameBoard.player.playerPositionX = playerX;
+            gameBoardCreator.checkIfIsStatChanger(cell);
+            gameBoardCreator.labels[playerX][playerY].setText("");
+            gameBoardCreator.gameComponents[playerX][playerY] = gameBoardCreator.player;
+            gameBoardCreator.player.setPlayerPositionY(playerY);
+            gameBoardCreator.player.setPlayerPositionX(playerX);
         }
 
-        if (cell.type.equals("door")) {
-            if (creatingGameBoard.checkIfICanGoToNextLevel()) {
-                creatingGameBoard.goToNextLevel();
+        if (cell.getType().equals("door")) {
+            if (gameBoardCreator.checkIfICanGoToNextLevel()) {
+                gameBoardCreator.goToNextLevel();
             }
         }
 
 
-        creatingGameBoard.createFrame();
+        gameBoardCreator.createFrame();
 
 
     }
 
     private void updateContentPane(int playerx, int playery) {
 
-        if (creatingGameBoard.player.isAlive) {
-            if (!creatingGameBoard.gameComponents[playerx][playery].type.equals("bomb")) {
-                creatingGameBoard.gameComponents[playerx][playery] = new FieldCell();
+        if (gameBoardCreator.player.isAlive()) {
+            if (!gameBoardCreator.gameComponents[playerx][playery].getType().equals("bomb")) {
+                gameBoardCreator.gameComponents[playerx][playery] = new FieldCell();
             }
-            creatingGameBoard.player.bombSet = false;
+            gameBoardCreator.player.setBombSet(false);
 
-            creatingGameBoard.player.currentBomb = null;
+            gameBoardCreator.player.setCurrentBomb(null);
         }
     }
 

@@ -5,15 +5,15 @@ import java.io.Serializable;
  */
 public class EnemyLvL2 extends Enemy implements Serializable {
     final private String type = "enemyLvL2";
-    int level = 2;
-    boolean isRandom = false;
+    private int level = 2;
     static int sleep = 8;
 
     public EnemyLvL2() {
-        super.level = level;
-        super.type = type;
-        super.passable = false;
-        super.neverPassable = true;
+        super.setLevel(level);
+        super.setType(type);
+        super.setPassable(false);
+        super.setSleep(sleep);
+        super.setNeverPassable(true);
 
 
     }

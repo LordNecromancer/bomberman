@@ -16,13 +16,13 @@ public class GameClient {
     private Socket socket;
     private String name;
     private boolean isStarted = false;
-    CreatingGameBoard creatingGameBoard;
+    GameBoardCreator gameBoardCreator;
     static GameClient client;
     Player player;
     int width;
     int height;
     private String roomName;
-    private CreatingOrJoiningGameRoom createOrJoinRoom;
+    private JoiningOrCreatingGameRoomInterface createOrJoinRoom;
     private long time;
 
     GameClient() throws IOException, ClassNotFoundException {
@@ -44,7 +44,7 @@ public class GameClient {
 
         run();
 
-        createOrJoinRoom = new CreatingOrJoiningGameRoom(this);
+        createOrJoinRoom = new JoiningOrCreatingGameRoomInterface(this);
 
         // text = createOrJoinRoom.textShown;
 
@@ -111,8 +111,8 @@ public class GameClient {
 
                     if (object[0] instanceof Player) {
                         player = (Player) object[0];
-                        if (creatingGameBoard != null)
-                            creatingGameBoard.player = player;
+                        if (gameBoardCreator != null)
+                            gameBoardCreator.player = player;
                     } else if (object[0] instanceof GameComponent[][]) {
 
                         GameComponent[][] array = null;
@@ -121,9 +121,9 @@ public class GameClient {
                         array = (GameComponent[][]) object[0];
 
 
-                        if (creatingGameBoard != null) {
-                            creatingGameBoard.gameComponents = array;
-                            creatingGameBoard.createFrame();
+                        if (gameBoardCreator != null) {
+                            gameBoardCreator.gameComponents = array;
+                            gameBoardCreator.createFrame();
                         }
                     } else if (object[0] instanceof String) {
 
@@ -135,18 +135,18 @@ public class GameClient {
 
                         if (string[0].equals("JoinedRoom$")) {
 
-                            creatingGameBoard.gameTime = new Time(client.time);
-                            creatingGameBoard.setTimer();
+                            gameBoardCreator.setGameTime(new Time(client.time));
+                            gameBoardCreator.setTimer();
                         }
 
 
                         if (string[0].equals("NoSuchRoom$")) {
 
 
-                            createOrJoinRoom.textShown.setText("No such room exists." + "\r\n");
+                            createOrJoinRoom.getTextShown().setText("No such room exists." + "\r\n");
 
                         } else if (string[0].startsWith("#score$")) {
-                            creatingGameBoard.refreshScore(string[0].substring(7));
+                            gameBoardCreator.refreshScore(string[0].substring(7));
                         } else if (string[0].startsWith("#width$")) {
                             width = Integer.valueOf(string[0].substring(7));
                         } else if (string[0].startsWith("#height$")) {
@@ -154,15 +154,15 @@ public class GameClient {
 
                         } else if (string[0].startsWith("#time$")) {
                             time = Integer.valueOf(string[0].substring(6));
-                            if (creatingGameBoard != null) {
-                                creatingGameBoard.gameTime = new Time(time);
+                            if (gameBoardCreator != null) {
+                                gameBoardCreator.setGameTime(new Time(time));
                             }
 
                         } else if (string[0].startsWith("#playerX$")) {
-                            player.playerPositionX = Integer.valueOf(string[0].substring(9));
+                            player.setPlayerPositionX(Integer.valueOf(string[0].substring(9)));
 
                         } else if (string[0].startsWith("#playerY$")) {
-                            player.playerPositionY = Integer.valueOf(string[0].substring(9));
+                            player.setPlayerPositionY(Integer.valueOf(string[0].substring(9)));
 
                         } else {
                             if (string[0].startsWith("#roomName$")) {
@@ -170,20 +170,20 @@ public class GameClient {
                                 GameManager gameManager = new GameManager(width, height, null, true);
                                 gameManager.createBoard();
                                 gameManager.init();
-                                client.creatingGameBoard = gameManager.creatingGameBoard;
-                                creatingGameBoard.player = player;
+                                client.gameBoardCreator = gameManager.gameBoardCreator;
+                                gameBoardCreator.player = player;
 
-                                creatingGameBoard.gameTime = new Time(time);
-                                creatingGameBoard.setTimer();
+                                gameBoardCreator.setGameTime(new Time(time));
+                                gameBoardCreator.setTimer();
 
 
                             } else if (string[0].equals("#lost$")) {
                                 JOptionPane.showMessageDialog(null, "Game Over!!!", "Game Over!", 1);
 
                             } else if (string[0].startsWith("@")) {
-                                createOrJoinRoom.textShown.setText(createOrJoinRoom.textShown.getText() + string[0] + "\r\n");
+                                createOrJoinRoom.getTextShown().setText(createOrJoinRoom.getTextShown().getText() + string[0] + "\r\n");
                             } else if (string[0].length() > name.length() + 5) {
-                                createOrJoinRoom.textShown.setText(createOrJoinRoom.textShown.getText() + string[0] + "\r\n");
+                                createOrJoinRoom.getTextShown().setText(createOrJoinRoom.getTextShown().getText() + string[0] + "\r\n");
                             }
                         }
                     }
@@ -210,7 +210,7 @@ public class GameClient {
 
 
         } catch (IOException e) {
-            createOrJoinRoom.textShown.append("\r\n" + "Sorry the server is unavailable right now :(");
+            createOrJoinRoom.getTextShown().append("\r\n" + "Sorry the server is unavailable right now :(");
 
         }
     }

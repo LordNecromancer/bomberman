@@ -6,10 +6,10 @@ import java.io.Serializable;
  * Created by Sun on 07/31/2018.
  */
 public class MainFrameGraphics implements Serializable {
-    CreatingGameBoard creatingGameBoard;
+    GameBoardCreator gameBoardCreator;
 
-    public MainFrameGraphics(CreatingGameBoard creatingGameBoard) {
-        this.creatingGameBoard = creatingGameBoard;
+    public MainFrameGraphics(GameBoardCreator gameBoardCreator) {
+        this.gameBoardCreator = gameBoardCreator;
     }
 
     private ImageIcon hurdle = new ImageIcon("obstacle.png");
@@ -25,19 +25,19 @@ public class MainFrameGraphics implements Serializable {
     private ImageIcon door = new ImageIcon("door.png");
 
     private JPanel contentPane;
-    JPanel center;
-    public JLabel score;
-    public JLabel time;
+    private JPanel center;
+    private JLabel score;
+    private JLabel time;
     private JPanel top;
     private ActionListeners listeners;
 
 
     void crateGameFrame(int w, int h, int dw, int dh) {
-        creatingGameBoard.setTitle("BomberMan");
-        creatingGameBoard.setSize(dh, dw + dw / 8);
-        creatingGameBoard.setVisible(true);
-        creatingGameBoard.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        contentPane = (JPanel) creatingGameBoard.getContentPane();
+        gameBoardCreator.setTitle("BomberMan");
+        gameBoardCreator.setSize(dh, dw + dw / 8);
+        gameBoardCreator.setVisible(true);
+        gameBoardCreator.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        contentPane = (JPanel) gameBoardCreator.getContentPane();
         contentPane.setBackground(Color.black);
         createTopPanel(dw, dh);
         createCenterPanel(w, h, dw, dh);
@@ -58,7 +58,7 @@ public class MainFrameGraphics implements Serializable {
     }
 
     private void createScoreLabel() {
-        score = new JLabel(Integer.toString(creatingGameBoard.points));
+        score = new JLabel(Integer.toString(gameBoardCreator.points));
         score.setForeground(Color.CYAN);
         score.setSize(top.getWidth() / 2, top.getHeight());
     }
@@ -78,11 +78,11 @@ public class MainFrameGraphics implements Serializable {
         center.setLayout(new GridLayout(2 + w, 2 + h));
         center.setBackground(Color.black);
         center.setPreferredSize(new Dimension(dh / 2, dw / 2));
-        listeners = new ActionListeners(creatingGameBoard);
-        creatingGameBoard.addKeyListener(listeners);
+        listeners = new ActionListeners(gameBoardCreator);
+        gameBoardCreator.addKeyListener(listeners);
         for (int i = 0; i < w + 2; i++) {
             for (int j = 0; j < h + 2; j++) {
-                creatingGameBoard.labels[i][j] = new JLabel();
+                gameBoardCreator.labels[i][j] = new JLabel();
 
             }
         }
@@ -90,10 +90,10 @@ public class MainFrameGraphics implements Serializable {
 
     public JLabel showTheObject(int i, int j) {
 
-        JLabel label = creatingGameBoard.labels[i][j];
+        JLabel label = gameBoardCreator.labels[i][j];
 
 
-        switch (creatingGameBoard.gameComponents[i][j].type) {
+        switch (gameBoardCreator.gameComponents[i][j].getType()) {
             case "player":
                 label = new JLabel(man);
                 break;
@@ -164,10 +164,34 @@ public class MainFrameGraphics implements Serializable {
 
 
     public ImageIcon getBombIcon(int i, int j) {
-        if (creatingGameBoard.player.playerPositionX == i && creatingGameBoard.player.playerPositionY == j) {
+        if (gameBoardCreator.player.getPlayerPositionX() == i && gameBoardCreator.player.getPlayerPositionY() == j) {
             return manBomb;
         } else {
             return bombIcon;
         }
+    }
+
+    public JPanel getCenter() {
+        return center;
+    }
+
+    public void setCenter(JPanel center) {
+        this.center = center;
+    }
+
+    public JLabel getScore() {
+        return score;
+    }
+
+    public void setScore(JLabel score) {
+        this.score = score;
+    }
+
+    public JLabel getTime() {
+        return time;
+    }
+
+    public void setTime(JLabel time) {
+        this.time = time;
     }
 }

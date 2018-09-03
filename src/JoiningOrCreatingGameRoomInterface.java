@@ -8,7 +8,7 @@ import java.io.IOException;
 /**
  * Created by Sun on 08/12/2018.
  */
-public class CreatingOrJoiningGameRoom extends JFrame {
+public class JoiningOrCreatingGameRoomInterface extends JFrame {
 
 
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -18,7 +18,7 @@ public class CreatingOrJoiningGameRoom extends JFrame {
     private int h = 350;
     private int startingPointWidth = width / 2 - w / 2;
     private int startingPointHeight = height / 2 - h / 2;
-    JTextArea textShown;
+    private JTextArea textShown;
     private JButton joinRoom;
     private JButton createRoom;
     private JTextField textField;
@@ -28,7 +28,7 @@ public class CreatingOrJoiningGameRoom extends JFrame {
     private boolean isStarted = false;
     private SettingUpGraphics graphics = new SettingUpGraphics(width, height);
 
-    public CreatingOrJoiningGameRoom(GameClient client) throws IOException {
+    public JoiningOrCreatingGameRoomInterface(GameClient client) throws IOException {
         this.client = client;
     }
 
@@ -93,7 +93,7 @@ public class CreatingOrJoiningGameRoom extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    CreatingGameRoom creatingGameRoom = new CreatingGameRoom(client);
+                    GameRoomCreator gameRoomCreator = new GameRoomCreator(client);
 
                 } catch (IOException e1) {
                     e1.printStackTrace();
@@ -103,4 +103,11 @@ public class CreatingOrJoiningGameRoom extends JFrame {
     }
 
 
+    public JTextArea getTextShown() {
+        return textShown;
+    }
+
+    public void setTextShown(JTextArea textShown) {
+        this.textShown = textShown;
+    }
 }

@@ -20,11 +20,11 @@ public class GameManager implements Serializable {
     private int bombLimit = 1;
     private int level = 1;
     private int points = 0;
-    boolean isOnline;
+    private boolean isOnline;
     Player player = null;
-    CreatingGameBoard creatingGameBoard;
+    GameBoardCreator gameBoardCreator;
     GameComponent[][] gameComponents = null;
-    static int gameId;
+    private static int gameId;
 
 
     /**
@@ -42,18 +42,18 @@ public class GameManager implements Serializable {
         this.gameComponents = gameComponents;
         obstacleCount = (w + h) / 2;
         // player = new Player(playerx, playery);
-        // creatingGameBoard();
+        // gameBoardCreator();
 
     }
 
     public void createBoard() {
 
-        creatingGameBoard = new CreatingGameBoard(this, boardWidth, boardHeight, gameComponents, player, isOnline);
+        gameBoardCreator = new GameBoardCreator(this, boardWidth, boardHeight, gameComponents, player, isOnline);
 
     }
 
     void init() {
-        creatingGameBoard.init();
+        gameBoardCreator.init();
     }
 
 
@@ -77,10 +77,10 @@ public class GameManager implements Serializable {
         return level;
     }
 
-    public void goToNextLevel(CreatingGameBoard creatingGameBoard) {
+    public void goToNextLevel(GameBoardCreator gameBoardCreator) {
         level++;
 
-        this.creatingGameBoard = new CreatingGameBoard(this, creatingGameBoard.width, creatingGameBoard.height, null, creatingGameBoard.player, isOnline);
+        this.gameBoardCreator = new GameBoardCreator(this, gameBoardCreator.width, gameBoardCreator.height, null, gameBoardCreator.player, isOnline);
         init();
     }
 
@@ -103,7 +103,7 @@ public class GameManager implements Serializable {
     }
 
 
-    static void saveFile(CreatingGameBoard creatingGameBoard) {
+    static void saveFile(GameBoardCreator gameBoardCreator) {
 
         String url = "jdbc:mysql://localhost:3306/bomberman";
         String username = "root";
@@ -122,12 +122,12 @@ public class GameManager implements Serializable {
         } catch (SQLException e) {
             throw new IllegalStateException("Cannot connect the database!", e);
         }
-        addToGameTable(creatingGameBoard, statement, connection, name);
-        addToGameSpecs(creatingGameBoard, connection);
-        addToGameComponentsArray(creatingGameBoard, connection);
+        addToGameTable(gameBoardCreator, statement, connection, name);
+        addToGameSpecs(gameBoardCreator, connection);
+        addToGameComponentsArray(gameBoardCreator, connection);
     }
 
-    private static void addToGameComponentsArray(CreatingGameBoard creatingGameBoard, Connection connection) {
+    private static void addToGameComponentsArray(GameBoardCreator gameBoardCreator, Connection connection) {
         Statement statement;
         try {
             statement = connection.createStatement();
@@ -142,18 +142,18 @@ public class GameManager implements Serializable {
             statement.executeUpdate(string.toString());
             String str2 = "insert into gameComponentsArray (gameId,objectName,XComponent,YComponent) " + "values (?,?,?,?)";
 
-            insertIntogameComponentTable(creatingGameBoard, connection, str2);
+            insertIntoGameComponentTable(gameBoardCreator, connection, str2);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    private static void insertIntogameComponentTable(CreatingGameBoard creatingGameBoard, Connection connection, String str2) throws SQLException {
+    private static void insertIntoGameComponentTable(GameBoardCreator gameBoardCreator, Connection connection, String str2) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(str2);
-        for (int i = 0; i < creatingGameBoard.width + 2; i++) {
-            for (int j = 0; j < creatingGameBoard.height + 2; j++) {
+        for (int i = 0; i < gameBoardCreator.width + 2; i++) {
+            for (int j = 0; j < gameBoardCreator.height + 2; j++) {
                 preparedStatement.setInt(1, gameId);
-                preparedStatement.setString(2, creatingGameBoard.gameComponents[i][j].getClass().getName());
+                preparedStatement.setString(2, gameBoardCreator.gameComponents[i][j].getClass().getName());
                 preparedStatement.setInt(3, i);
                 preparedStatement.setInt(4, j);
                 preparedStatement.execute();
@@ -174,7 +174,7 @@ public class GameManager implements Serializable {
 //        try {
 //            if (fos != null) {
 //                oos = new ObjectOutputStream(fos);
-//                oos.writeObject(creatingGameBoard);
+//                oos.writeObject(gameBoardCreator);
 //                oos.close();
 //            }
 //        } catch (IOException e1) {
@@ -183,7 +183,7 @@ public class GameManager implements Serializable {
     // }
 
 
-    private static void addToGameSpecs(CreatingGameBoard creatingGameBoard, Connection connection) {
+    private static void addToGameSpecs(GameBoardCreator gameBoardCreator, Connection connection) {
         Statement statement;
         try {
             statement = connection.createStatement();
@@ -203,7 +203,7 @@ public class GameManager implements Serializable {
 
             statement.executeUpdate(string.toString());
 
-            insertIntoGameSpecsTable(creatingGameBoard, connection);
+            insertIntoGameSpecsTable(gameBoardCreator, connection);
 
             System.out.println("Database connected!");
         } catch (SQLException e) {
@@ -213,26 +213,26 @@ public class GameManager implements Serializable {
         }
     }
 
-    private static void insertIntoGameSpecsTable(CreatingGameBoard creatingGameBoard, Connection connection) throws SQLException {
+    private static void insertIntoGameSpecsTable(GameBoardCreator gameBoardCreator, Connection connection) throws SQLException {
         String str2 = "insert into bomberManSpecs (gameId,bombSet,bombControl,playerSpeed,isAlive,bombNum,bombCount,gameTime,score,bombRadius) " + "values (?,?,?,?,?,?,?,?,?,?)";
 
         PreparedStatement preparedStatement = connection.prepareStatement(str2);
         preparedStatement.setInt(1, gameId);
-        preparedStatement.setBoolean(2, creatingGameBoard.player.bombSet);
-        preparedStatement.setBoolean(3, creatingGameBoard.player.bombControl);
-        preparedStatement.setInt(4, (int) creatingGameBoard.player.playerSpeed);
-        preparedStatement.setBoolean(5, creatingGameBoard.player.isAlive);
-        preparedStatement.setInt(6, CreatingGameBoard.player.bombNum);
-        preparedStatement.setInt(7, CreatingGameBoard.player.bombCount);
-        preparedStatement.setInt(8, (int) creatingGameBoard.gameTime.getTime());
-        preparedStatement.setInt(9, creatingGameBoard.points);
-        preparedStatement.setInt(10, creatingGameBoard.player.bombRadius);
+        preparedStatement.setBoolean(2, gameBoardCreator.player.isBombSet());
+        preparedStatement.setBoolean(3, gameBoardCreator.player.isBombControl());
+        preparedStatement.setInt(4, (int) gameBoardCreator.player.getPlayerSpeed());
+        preparedStatement.setBoolean(5, gameBoardCreator.player.isAlive());
+        preparedStatement.setInt(6, GameBoardCreator.player.getBombNum());
+        preparedStatement.setInt(7, GameBoardCreator.player.getBombCount());
+        preparedStatement.setInt(8, (int) gameBoardCreator.getGameTime().getTime());
+        preparedStatement.setInt(9, gameBoardCreator.points);
+        preparedStatement.setInt(10, gameBoardCreator.player.getBombRadius());
 
 
         preparedStatement.execute();
     }
 
-    private static void addToGameTable(CreatingGameBoard creatingGameBoard, Statement statement, Connection connection, String name) {
+    private static void addToGameTable(GameBoardCreator gameBoardCreator, Statement statement, Connection connection, String name) {
         try {
             StringBuilder string = new StringBuilder("CREATE TABLE IF NOT EXISTS " + "bomberManTest");
             string.append("(gameId INT(64)  AUTO_INCREMENT PRIMARY KEY NOT NULL  ,");
@@ -243,7 +243,7 @@ public class GameManager implements Serializable {
 
             statement.executeUpdate(string.toString());
 
-            PreparedStatement preparedStatement = insertIntoGameTable(creatingGameBoard, connection, name);
+            PreparedStatement preparedStatement = insertIntoGameTable(gameBoardCreator, connection, name);
 
             ResultSet rs = preparedStatement.getGeneratedKeys();
             rs.next();
@@ -260,13 +260,13 @@ public class GameManager implements Serializable {
         }
     }
 
-    private static PreparedStatement insertIntoGameTable(CreatingGameBoard creatingGameBoard, Connection connection, String name) throws SQLException {
+    private static PreparedStatement insertIntoGameTable(GameBoardCreator gameBoardCreator, Connection connection, String name) throws SQLException {
         String str2 = "insert into bomberManTest (gameName,width,height) " + "values (?,?,?)";
 
         PreparedStatement preparedStatement = connection.prepareStatement(str2, Statement.RETURN_GENERATED_KEYS);
         preparedStatement.setString(1, name);
-        preparedStatement.setInt(2, creatingGameBoard.width);
-        preparedStatement.setInt(3, creatingGameBoard.height);
+        preparedStatement.setInt(2, gameBoardCreator.width);
+        preparedStatement.setInt(3, gameBoardCreator.height);
 
         preparedStatement.execute();
         return preparedStatement;
@@ -331,13 +331,13 @@ public class GameManager implements Serializable {
 
 
             }
-            player.bombSet = bombSet;
-            player.isAlive = isAlive;
-            player.bombControl = bombControl;
-            player.playerSpeed = playerSpeed;
-            player.bombRadius = bombRadius;
-            player.bombCount = bombCount;
-            player.bombNum = bombNum;
+            player.setBombSet(bombSet);
+            player.setAlive(isAlive);
+            player.setBombControl(bombControl);
+            player.setPlayerSpeed(playerSpeed);
+            player.setBombRadius(bombRadius);
+            player.setBombCount(bombCount);
+            player.setBombNum(bombNum);
 
             result = statement.executeQuery("SELECT  * FROM gameComponentsArray WHERE gameId='" + gameId + "'");
             while (result.next()) {
@@ -357,8 +357,8 @@ public class GameManager implements Serializable {
 
                 } else {
                     gameComponents[XComponent][YComponent] = player;
-                    player.playerPositionX = XComponent;
-                    player.playerPositionY = YComponent;
+                    player.setPlayerPositionX(XComponent);
+                    player.setPlayerPositionY(YComponent);
 
                 }
             }
@@ -368,24 +368,24 @@ public class GameManager implements Serializable {
 
             gameManager.createBoard();
             for (int i = 0; i < enemies.size(); i++) {
-                gameManager.creatingGameBoard.enemies.add(enemies.get(i));
+                gameManager.gameBoardCreator.getEnemies().add(enemies.get(i));
             }
             for (int i = 0; i < bombsX.size(); i++) {
                 // String className = resultSet.getString("objectName");
                 int XComponent = bombsX.get(i);
                 int YComponent = bombsY.get(i);
-                BombCell bombCell = new BombCell(player.bombRadius, gameManager.bombExplosionTime, gameManager.creatingGameBoard, XComponent, YComponent);
+                BombCell bombCell = new BombCell(player.getBombRadius(), gameManager.bombExplosionTime, gameManager.gameBoardCreator, XComponent, YComponent);
                 gameComponents[XComponent][YComponent] = bombCell;
-                player.bombCells.add(bombCell);
+                player.getBombCells().add(bombCell);
                 if (i == 0) {
-                    player.currentBomb = bombCell;
+                    player.setCurrentBomb(bombCell);
                 }
 
 
             }
-            gameManager.creatingGameBoard.gameComponents = gameComponents;
-            gameManager.creatingGameBoard.gameTime = new Time(gameTime);
-            gameManager.creatingGameBoard.points = score;
+            gameManager.gameBoardCreator.gameComponents = gameComponents;
+            gameManager.gameBoardCreator.setGameTime(new Time(gameTime));
+            gameManager.gameBoardCreator.points = score;
             gameManager.init();
 
         } catch (ClassNotFoundException e) {
@@ -407,9 +407,9 @@ public class GameManager implements Serializable {
 //
 //                FileInputStream fis = new FileInputStream(file.getPath());
 //                ObjectInputStream ois = new ObjectInputStream(fis);
-//                CreatingGameBoard result = (CreatingGameBoard) ois.readObject();
+//                GameBoardCreator result = (GameBoardCreator) ois.readObject();
 //
-//                CreatingGameBoard newCreateBoard = new CreatingGameBoard(result.gameManager, result.width, result.height, result.gameComponents, result.player, result.bombCount, result.isOnline);
+//                GameBoardCreator newCreateBoard = new GameBoardCreator(result.gameManager, result.width, result.height, result.gameComponents, result.player, result.bombCount, result.isOnline);
 //                newCreateBoard.init();
 //                ois.close();
 //

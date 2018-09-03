@@ -4,14 +4,14 @@ import java.io.IOException;
 /**
  * Created by Sun on 08/12/2018.
  */
-public class CreatingGameRoom {
+public class GameRoomCreator {
 
     int width;
     int height;
     private String roomName;
     private GameClient client;
 
-    public CreatingGameRoom(GameClient client) throws IOException {
+    public GameRoomCreator(GameClient client) throws IOException {
         this.client = client;
         width = Integer.valueOf(JOptionPane.showInputDialog("choose width"));
         height = Integer.valueOf(JOptionPane.showInputDialog("choose height"));

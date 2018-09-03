@@ -5,14 +5,14 @@ import java.awt.event.ActionListener;
 
 
 public class StartFrame extends JFrame {
-    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     int width = screenSize.width;
     int height = screenSize.height;
-    int w = 400;
-    int h = 350;
+    private int w = 400;
+    private int h = 350;
     private int startingPointWidth = width / 2 - w / 2;
     private int startingPointHeight = height / 2 - h / 2;
-    JLabel icon;
+    private JLabel icon;
     //boolean isOnline = false;
 
     public void run() {

@@ -5,68 +5,68 @@ import java.util.ArrayList;
  * Created by Sun on 07/25/2018.
  */
 public class MovingEnemyRandomly implements Serializable {
-    CreatingGameBoard creatingGameBoard;
+    GameBoardCreator gameBoardCreator;
 
-    public synchronized void move(CreatingGameBoard creatingGameBoard, int i, int j, Enemy enemy, int randomNum, ArrayList<GameComponent> chooseDirection) {
+    public synchronized void move(GameBoardCreator gameBoardCreator, int i, int j, Enemy enemy, int randomNum, ArrayList<GameComponent> chooseDirection) {
 
-        this.creatingGameBoard = creatingGameBoard;
-        GameComponent up = creatingGameBoard.gameComponents[i - 1][j];
-        GameComponent right = creatingGameBoard.gameComponents[i][j + 1];
-        GameComponent down = creatingGameBoard.gameComponents[i + 1][j];
-        GameComponent left = creatingGameBoard.gameComponents[i][j - 1];
+        this.gameBoardCreator = gameBoardCreator;
+        GameComponent up = gameBoardCreator.gameComponents[i - 1][j];
+        GameComponent right = gameBoardCreator.gameComponents[i][j + 1];
+        GameComponent down = gameBoardCreator.gameComponents[i + 1][j];
+        GameComponent left = gameBoardCreator.gameComponents[i][j - 1];
         if (randomNum != -1) {
-            if (chooseDirection.get(randomNum) == creatingGameBoard.player) {
-                creatingGameBoard.killPlayer();
-                creatingGameBoard.enemyMove2.stop();
-                creatingGameBoard.enemyMove.stop();
+            if (chooseDirection.get(randomNum) == gameBoardCreator.player) {
+                gameBoardCreator.killPlayer();
+                gameBoardCreator.getEnemyMove2().stop();
+                gameBoardCreator.getEnemyMove().stop();
             }
 
 
             if (chooseDirection.get(randomNum) == up) {
 
-                if (up.passable && !enemy.isGhosting) {
-                    creatingGameBoard.gameComponents[i][j] = new FieldCell();
+                if (up.getPassable() && !enemy.isGhosting()) {
+                    gameBoardCreator.gameComponents[i][j] = new FieldCell();
                 } else {
                     currentLocation(enemy, i, j);
                     nextLocation(enemy, i - 1, j);
 
                 }
-                creatingGameBoard.gameComponents[i - 1][j] = enemy;
+                gameBoardCreator.gameComponents[i - 1][j] = enemy;
 
 
             } else if (chooseDirection.get(randomNum) == right) {
-                if (right.passable && !enemy.isGhosting) {
-                    creatingGameBoard.gameComponents[i][j] = new FieldCell();
+                if (right.getPassable() && !enemy.isGhosting()) {
+                    gameBoardCreator.gameComponents[i][j] = new FieldCell();
                 } else {
                     currentLocation(enemy, i, j);
                     nextLocation(enemy, i, j + 1);
 
                 }
-                creatingGameBoard.gameComponents[i][j + 1] = enemy;
+                gameBoardCreator.gameComponents[i][j + 1] = enemy;
 
 
             } else if (chooseDirection.get(randomNum) == down) {
 
-                if (down.passable && !enemy.isGhosting) {
-                    creatingGameBoard.gameComponents[i][j] = new FieldCell();
+                if (down.getPassable() && !enemy.isGhosting()) {
+                    gameBoardCreator.gameComponents[i][j] = new FieldCell();
                 } else {
                     currentLocation(enemy, i, j);
                     nextLocation(enemy, i + 1, j);
 
                 }
-                creatingGameBoard.gameComponents[i + 1][j] = enemy;
+                gameBoardCreator.gameComponents[i + 1][j] = enemy;
 
 
             } else if (chooseDirection.get(randomNum) == left) {
 
-                if (left.passable && !enemy.isGhosting) {
-                    creatingGameBoard.gameComponents[i][j] = new FieldCell();
+                if (left.getPassable() && !enemy.isGhosting()) {
+                    gameBoardCreator.gameComponents[i][j] = new FieldCell();
                 } else {
                     currentLocation(enemy, i, j);
                     nextLocation(enemy, i, j - 1);
 
                 }
-                creatingGameBoard.gameComponents[i][j - 1] = enemy;
+                gameBoardCreator.gameComponents[i][j - 1] = enemy;
 
 
             }
@@ -74,9 +74,9 @@ public class MovingEnemyRandomly implements Serializable {
     }
 
     private void nextLocation(Enemy enemy, int i, int j) {
-        if (!creatingGameBoard.gameComponents[i][j].neverPassable) {
+        if (!gameBoardCreator.gameComponents[i][j].isNeverPassable()) {
 
-            enemy.disappearedObject = creatingGameBoard.gameComponents[i][j];
+            enemy.setDisappearedObject(gameBoardCreator.gameComponents[i][j]);
 
         }
     }
@@ -84,8 +84,8 @@ public class MovingEnemyRandomly implements Serializable {
     private void currentLocation(Enemy enemy, int i, int j) {
 
 
-        creatingGameBoard.setGameComponents(i, j, enemy.disappearedObject);
-        enemy.disappearedObject = null;
+        gameBoardCreator.setGameComponents(i, j, enemy.getDisappearedObject());
+        enemy.setDisappearedObject(null);
 
 
     }

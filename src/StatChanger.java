@@ -8,10 +8,14 @@ public abstract class StatChanger extends GameComponent implements Serializable 
 
 
     StatChanger() {
-        super.isExplosive = false;
-        super.neverPassable = true;
+        super.setExplosive(false);
+        super.setNeverPassable(true);
     }
 
     public abstract void doYourThing();
+
+    @Override
+    public void destroy(GameBoardCreator gameBoardCreator, int i, int j) {
+    }
 
 }
