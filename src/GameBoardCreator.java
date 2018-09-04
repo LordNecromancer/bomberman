@@ -41,6 +41,7 @@ public class GameBoardCreator extends JFrame implements Serializable {
     private ImageIcon imageIcon = null;
     private Date date;
     private boolean isOnline = false;
+    private int maximumEnemyLevel = 4;
 
     public GameBoardCreator(GameManager gameManager, int w, int h, GameComponent[][] gameComponents, Player player, boolean isOnline) {
 
@@ -166,7 +167,7 @@ public class GameBoardCreator extends JFrame implements Serializable {
 
     private Enemy createRandomEnemy() {
         int imaginaryLevel = level;
-        if (level > 4) {
+        if (level > maximumEnemyLevel) {
             imaginaryLevel = 4;
         }
         int randomNum = new Random().nextInt(imaginaryLevel) + 1;
@@ -213,7 +214,7 @@ public class GameBoardCreator extends JFrame implements Serializable {
         powerUps.add(new IncreasingPointsPowerUp());
         powerUps.add(new IncreasingRadiusPowerUp());
         powerUps.add(new IncreasingSpeedPowerUp());
-        powerUps.add(new BombControl());
+        powerUps.add(new BombControlPowerUp());
         powerUps.add(new GhostAbility(this));
 
         Random r = new Random();
@@ -227,7 +228,7 @@ public class GameBoardCreator extends JFrame implements Serializable {
         poisons.add(new DecreasingPointsPoison());
         poisons.add(new DecreasingRadiusPoison());
         poisons.add(new DecreasingSpeedPoison());
-        poisons.add(new LosingBombControl());
+        poisons.add(new LosingBombControlPoison());
 
         Random r = new Random();
         int m = r.nextInt(poisons.size() - 1);

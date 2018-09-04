@@ -1,14 +1,14 @@
 import java.io.Serializable;
 
 
-public class BombControl extends PowerUps implements Serializable {
+public class BombControlPowerUp extends PowerUps implements Serializable {
     private static final long serialVersionUID = 1113799434508676069L;
 
     final private String type = "bombControl";
 
     GameBoardCreator gameBoardCreator;
 
-    BombControl() {
+    BombControlPowerUp() {
 
 
         super.setType(type);
