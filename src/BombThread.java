@@ -58,6 +58,7 @@ public class BombThread extends Thread implements Serializable {
 
         if (i > -1 && j > -1 && i < gameBoardCreator.width + 2 && j < gameBoardCreator.height + 2) {
             if (gameBoardCreator.gameComponents[i][j].isExplosive()) {
+                gameBoardCreator.gameComponents[i][j].destroy(gameBoardCreator, i, j);
 
             }
         }

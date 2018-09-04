@@ -37,7 +37,6 @@ public class ObstacleCell extends GameComponent implements Serializable {
 
     public ObstacleCell() {
         super.setType(type);
-        super.setPassable(false);
 
 
     }

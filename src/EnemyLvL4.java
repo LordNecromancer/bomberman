@@ -16,8 +16,13 @@ public class EnemyLvL4 extends Enemy implements Serializable {
         super.setSleep(sleep);
         super.setGhosting(isGhosting);
         super.setDisappearedObject(disappearedObject);
-        super.setPassable(false);
         super.setNeverPassable(true);
+        passableObjects.add("FieldCell");
+        passableObjects.add("ObstacleCell");
+        passableObjects.add("WallCell");
+
+
+
 
 
     }

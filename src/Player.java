@@ -22,12 +22,17 @@ public class Player extends GameComponent implements Serializable {
     private int bombCount = 0;
     private int bombRadius = 1;
     private ArrayList<BombCell> bombCells = new ArrayList<>();
+    ArrayList<String> passableObjects=new ArrayList<>();
 
 
     public Player(String name) {
         this.name = name;
         super.setType(type);
         super.setPassable(true);
+
+        passableObjects.add("FieldCell");
+        passableObjects.add("StatChanger");
+
 
 //        this.playerPositionX = x;
 //        this.playerPositionY = y;

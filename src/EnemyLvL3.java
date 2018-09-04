@@ -12,8 +12,9 @@ public class EnemyLvL3 extends Enemy implements Serializable {
         super.setLevel(level);
         super.setType(type);
         super.setSleep(sleep);
-        super.setPassable(false);
         super.setNeverPassable(true);
+        passableObjects.add("FieldCell");
+
 
 
     }

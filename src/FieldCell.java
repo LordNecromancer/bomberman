@@ -17,6 +17,7 @@ public class FieldCell extends GameComponent implements Serializable {
     public FieldCell() {
         super.setType(type);
         super.setPassable(true);
+        super.setPassable(true);
 
 
     }

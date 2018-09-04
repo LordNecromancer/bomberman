@@ -57,6 +57,7 @@ public class GameBoardCreator extends JFrame implements Serializable {
         }
         GameBoardCreator.points = gameManager.getPoints();
         this.level = gameManager.getLevel();
+        this.level=1;
         isMoving = false;
         date = Date.from(Instant.now());
         this.player = player;

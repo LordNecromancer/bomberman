@@ -50,53 +50,7 @@ public class EnemyMovementThreadTypeTwo extends Thread implements Serializable {
                     for (int j = 0; j < gameBoardCreator.height + 2 && k < 1; j++) {
                         if (gameBoardCreator.gameComponents[i][j] == enemy) {
 
-
-                            chooseDirection = new ArrayList<>();
-
-                            up = gameBoardCreator.gameComponents[i - 1][j];
-                            right = gameBoardCreator.gameComponents[i][j + 1];
-                            down = gameBoardCreator.gameComponents[i + 1][j];
-                            left = gameBoardCreator.gameComponents[i][j - 1];
-                            if (enemy.isGhosting()) {
-                                if (i - 1 > 0 && !(gameBoardCreator.gameComponents[i - 1][j].isNeverPassable())) {
-                                    chooseDirection.add(up);
-                                }
-                                if (i + 1 > 0 && !(gameBoardCreator.gameComponents[i + 1][j].isNeverPassable())) {
-                                    chooseDirection.add(down);
-                                }
-                                if (j - 1 > 0 && !(gameBoardCreator.gameComponents[i][j - 1].isNeverPassable())) {
-
-                                    chooseDirection.add(left);
-                                }
-                                if (j + 1 > 0 && !(gameBoardCreator.gameComponents[i][j + 1].isNeverPassable())) {
-                                    chooseDirection.add(right);
-                                }
-                            } else {
-
-
-                                if (up.getPassable()) {
-
-                                    chooseDirection.add(up);
-
-                                }
-                                if (right.getPassable()) {
-
-                                    chooseDirection.add(right);
-
-                                }
-                                if (down.getPassable()) {
-
-                                    chooseDirection.add(down);
-
-                                }
-                                if (left.getPassable()) {
-
-
-                                    chooseDirection.add(left);
-
-                                }
-                            }
-
+                            findPossibleDirections(enemy,i,j);
 
 //                            } else {
 //                                if (up.passable && up.type.equals("wall") && up.type.equals("obstacle")) {
@@ -128,6 +82,31 @@ public class EnemyMovementThreadTypeTwo extends Thread implements Serializable {
                 }
             }
             gameBoardCreator.createFrame();
+        }
+    }
+    private void findPossibleDirections(Enemy enemy,int i, int j) {
+        chooseDirection = new ArrayList<>();
+
+        up = gameBoardCreator.gameComponents[i - 1][j];
+        right = gameBoardCreator.gameComponents[i][j + 1];
+        down = gameBoardCreator.gameComponents[i + 1][j];
+        left = gameBoardCreator.gameComponents[i][j - 1];
+
+        if (enemy.passableObjects.contains(up.getClass().getName())&& !up.isNeverPassable()) {
+
+            chooseDirection.add(up);
+        }
+        if (enemy.passableObjects.contains(right.getClass().getName()) && !right.isNeverPassable()) {
+
+            chooseDirection.add(right);
+        }
+        if (enemy.passableObjects.contains(down.getClass().getName()) && !down.isNeverPassable()) {
+
+            chooseDirection.add(down);
+        }
+        if (enemy.passableObjects.contains(left.getClass().getName()) && !left.isNeverPassable()) {
+
+            chooseDirection.add(left);
         }
     }
 
