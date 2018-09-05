@@ -50,26 +50,9 @@ public class EnemyMovementThreadTypeTwo extends Thread implements Serializable {
                     for (int j = 0; j < gameBoardCreator.height + 2 && k < 1; j++) {
                         if (gameBoardCreator.gameComponents[i][j] == enemy) {
 
-                            findPossibleDirections(enemy,i,j);
+                            findPossibleDirections(enemy, i, j);
 
-//                            } else {
-//                                if (up.passable && up.type.equals("wall") && up.type.equals("obstacle")) {
-//
-//                                    chooseDirection.add(up);
-//                                }
-//                                if (right.passable && right.type.equals("wall") && right.type.equals("obstacle")) {
-//
-//                                    chooseDirection.add(right);
-//                                }
-//                                if (down.passable && down.type.equals("wall") && down.type.equals("obstacle")) {
-//
-//                                    chooseDirection.add(down);
-//                                }
-//                                if (left.passable && left.type.equals("wall") && left.type.equals("obstacle")) {
-//
-//                                    chooseDirection.add(left);
-//                                }
-//                            }
+
                             if (enemy.getType().equals("enemyLvL3") || enemy.getType().equals("enemyLvL4")) {
 
                                 moveEnemyLevelThree((Enemy) gameBoardCreator.gameComponents[i][j], i, j);
@@ -84,7 +67,8 @@ public class EnemyMovementThreadTypeTwo extends Thread implements Serializable {
             gameBoardCreator.createFrame();
         }
     }
-    private void findPossibleDirections(Enemy enemy,int i, int j) {
+
+    private void findPossibleDirections(Enemy enemy, int i, int j) {
         chooseDirection = new ArrayList<>();
 
         up = gameBoardCreator.gameComponents[i - 1][j];
@@ -92,7 +76,7 @@ public class EnemyMovementThreadTypeTwo extends Thread implements Serializable {
         down = gameBoardCreator.gameComponents[i + 1][j];
         left = gameBoardCreator.gameComponents[i][j - 1];
 
-        if (enemy.passableObjects.contains(up.getClass().getName())&& !up.isNeverPassable()) {
+        if (enemy.passableObjects.contains(up.getClass().getName()) && !up.isNeverPassable()) {
 
             chooseDirection.add(up);
         }
@@ -214,7 +198,7 @@ public class EnemyMovementThreadTypeTwo extends Thread implements Serializable {
 
 
         gameBoardCreator.setGameComponents(i, j, enemy.getDisappearedObject());
-        enemy.setDisappearedObject(null);
+        enemy.setDisappearedObject(new FieldCell());
 
 
     }

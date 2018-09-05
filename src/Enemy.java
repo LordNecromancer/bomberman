@@ -18,7 +18,7 @@ public abstract class Enemy extends GameComponent implements Serializable {
     private boolean isGhosting = false;
     private int sleep;
     private GameComponent disappearedObject = null;
-    ArrayList<String> passableObjects=new ArrayList<>();
+    ArrayList<String> passableObjects = new ArrayList<>();
 
     Enemy() {
         super.setNeverPassable(true);

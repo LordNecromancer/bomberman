@@ -97,6 +97,9 @@ public class GameLoader extends JFrame {
 
             if (!className.equals("Player") && !className.equals("BombCell")) {
                 GameComponent gameComponent = (GameComponent) Class.forName(className).newInstance();
+                if (XComponent == 0 || YComponent == 0) {
+                    gameComponent.setNeverPassable(true);
+                }
                 gameComponents[XComponent][YComponent] = gameComponent;
                 if (gameComponent instanceof Enemy) {
                     enemies.add((Enemy) gameComponent);

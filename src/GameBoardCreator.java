@@ -26,7 +26,7 @@ public class GameBoardCreator extends JFrame implements Serializable {
     static int points = 0;
     private static long bombExplosionTime = 5;
     private ActionListeners listeners;
-    private MainFrameGraphics graphics = new MainFrameGraphics(this);
+    private MainFrameGraphics mainFrameGraphics = new MainFrameGraphics(this);
     private EnemyMovementThread enemyMove = new EnemyMovementThread(this);
     private EnemyMovementThreadTypeTwo enemyMove2 = new EnemyMovementThreadTypeTwo(this);
     private Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
@@ -57,10 +57,9 @@ public class GameBoardCreator extends JFrame implements Serializable {
         }
         GameBoardCreator.points = gameManager.getPoints();
         this.level = gameManager.getLevel();
-        this.level=1;
         isMoving = false;
         date = Date.from(Instant.now());
-        this.player = player;
+        GameBoardCreator.player = player;
 
 
         int realSizeWidth = dimension * (2 + w);
@@ -70,7 +69,7 @@ public class GameBoardCreator extends JFrame implements Serializable {
         //addKeyListenerToFrame();
         labels = new JLabel[width + 2][height + 2];
         listeners = new ActionListeners(this);
-        graphics.crateGameFrame(w, h, realSizeWidth, realSizeHeight);
+        mainFrameGraphics.crateGameFrame(w, h, realSizeWidth, realSizeHeight);
     }
 
     public static int getObstacleScore() {
@@ -105,7 +104,7 @@ public class GameBoardCreator extends JFrame implements Serializable {
             for (int j = 0; j < height + 2; j++) {
                 labels[i][j] = new JLabel(imageIcon);
                 labels[i][j].setBorder(border);
-                graphics.getCenter().add(labels[i][j]);
+                mainFrameGraphics.getCenter().add(labels[i][j]);
             }
         }
     }
@@ -216,7 +215,6 @@ public class GameBoardCreator extends JFrame implements Serializable {
         powerUps.add(new IncreasingRadiusPowerUp());
         powerUps.add(new IncreasingSpeedPowerUp());
         powerUps.add(new BombControlPowerUp());
-        powerUps.add(new GhostAbility(this));
 
         Random r = new Random();
         int m = r.nextInt(powerUps.size() - 1);
@@ -290,7 +288,7 @@ public class GameBoardCreator extends JFrame implements Serializable {
                 labels[i][j].setText("");
 
 
-                label = graphics.showTheObject(i, j);
+                label = mainFrameGraphics.showTheObject(i, j);
                 if (label.getIcon() != null) {
                     labels[i][j].setIcon(label.getIcon());
                 } else {
@@ -300,7 +298,7 @@ public class GameBoardCreator extends JFrame implements Serializable {
 
                 u++;
             }
-            graphics.getCenter().repaint();
+            mainFrameGraphics.getCenter().repaint();
             if (!isOnline) {
                 if (!isMoving) {
                     setTimer();
@@ -378,12 +376,12 @@ public class GameBoardCreator extends JFrame implements Serializable {
 
     void refreshTimer(long time) {
 
-        graphics.getTime().setText(Integer.toString((int) time / 60) + "  :  " + (int) time % 60);
+        mainFrameGraphics.getTime().setText(Integer.toString((int) time / 60) + "  :  " + (int) time % 60);
     }
 
     void refreshScore(String score) {
 
-        graphics.getScore().setText(score);
+        mainFrameGraphics.getScore().setText(score);
     }
 
     boolean checkIfICanGoToNextLevel() {
@@ -495,5 +493,9 @@ public class GameBoardCreator extends JFrame implements Serializable {
 
     public void setEnemies(ArrayList<Enemy> enemies) {
         this.enemies = enemies;
+    }
+
+    public MainFrameGraphics getMainFrameGraphics() {
+        return mainFrameGraphics;
     }
 }

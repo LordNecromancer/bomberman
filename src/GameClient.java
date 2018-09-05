@@ -125,6 +125,10 @@ public class GameClient {
                             gameBoardCreator.gameComponents = array;
                             gameBoardCreator.createFrame();
                         }
+
+                    } else if (object[0] instanceof Class) {
+                        Class cls = (Class) object[0];
+                        new LoadNewClass(cls, gameBoardCreator);
                     } else if (object[0] instanceof String) {
 
 

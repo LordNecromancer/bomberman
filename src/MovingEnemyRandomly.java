@@ -85,7 +85,7 @@ public class MovingEnemyRandomly implements Serializable {
 
 
         gameBoardCreator.setGameComponents(i, j, enemy.getDisappearedObject());
-        enemy.setDisappearedObject(null);
+        enemy.setDisappearedObject(new FieldCell());
 
 
     }

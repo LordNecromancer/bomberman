@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Sun on 07/31/2018.
@@ -30,6 +32,7 @@ public class MainFrameGraphics implements Serializable {
     private JLabel time;
     private JPanel top;
     private ActionListeners listeners;
+    private Map<String, ImageIcon> displayMap = new HashMap<>();
 
 
     void crateGameFrame(int w, int h, int dw, int dh) {
@@ -43,6 +46,7 @@ public class MainFrameGraphics implements Serializable {
         createCenterPanel(w, h, dw, dh);
         contentPane.add(top, BorderLayout.NORTH);
         contentPane.add(center, BorderLayout.CENTER);
+        addToDisplayMap();
     }
 
     private void createTopPanel(int dw, int dh) {
@@ -88,77 +92,93 @@ public class MainFrameGraphics implements Serializable {
         }
     }
 
+    private void addToDisplayMap() {
+        displayMap.put("player", man);
+        displayMap.put("obstacle", hurdle);
+        displayMap.put("field", field);
+        displayMap.put("wall", wall);
+        displayMap.put("enemyLvL1", enemyLvL1);
+        displayMap.put("enemyLvL2", enemyLvL2);
+        displayMap.put("enemyLvL3", enemyLvL3);
+        displayMap.put("enemyLvL4", enemyLvL4);
+        displayMap.put("door", door);
+    }
+
     public JLabel showTheObject(int i, int j) {
 
         JLabel label = gameBoardCreator.labels[i][j];
 
+        if (displayMap.containsKey(gameBoardCreator.gameComponents[i][j].getType())) {
+            label = new JLabel(displayMap.get(gameBoardCreator.gameComponents[i][j].getType()));
+        } else {
 
-        switch (gameBoardCreator.gameComponents[i][j].getType()) {
-            case "player":
-                label = new JLabel(man);
-                break;
-            case "field":
-                label = new JLabel(field);
-                break;
-            case "bomb":
-                label = new JLabel(getBombIcon(i, j));
-                break;
-            case "obstacle":
-                label = new JLabel(hurdle);
-                break;
-            case "wall":
-                label = new JLabel(wall);
-                break;
-            case "enemyLvL1":
-                label = new JLabel(enemyLvL1);
-                break;
-            case "enemyLvL2":
-                label = new JLabel(enemyLvL2);
-                break;
-            case "enemyLvL3":
-                label = new JLabel(enemyLvL3);
-                break;
-            case "enemyLvL4":
-                label = new JLabel(enemyLvL4);
-                break;
-            case "door":
-                label = new JLabel(door);
-                break;
-            case "decreaseBombs":
-                label = new JLabel("DBombs");
-                break;
-            case "decreasePoints":
-                label = new JLabel("DPoints");
-                break;
-            case "decreaseRadius":
-                label = new JLabel("DRadius");
-                break;
-            case "decreaseSpeed":
-                label = new JLabel("DSpeed");
-                break;
-            case "loseBombControl":
-                label = new JLabel("LBC");
-                break;
-            case "bombControl":
-                label = new JLabel("BC");
-                break;
-            case "increaseSpeed":
-                label = new JLabel("ISpeed");
-                break;
-            case "increaseRadius":
-                label = new JLabel("IRadius");
-                break;
-            case "increasePoints":
-                label = new JLabel("IPoints");
-                break;
-            case "increaseBombs":
-                label = new JLabel("IBombs");
-                break;
-            case "ghostAbility":
-                label = new JLabel("Ghost");
-                break;
+
+            switch (gameBoardCreator.gameComponents[i][j].getType()) {
+                case "player":
+                    label = new JLabel(man);
+                    break;
+                case "field":
+                    label = new JLabel(field);
+                    break;
+                case "bomb":
+                    label = new JLabel(getBombIcon(i, j));
+                    break;
+                case "obstacle":
+                    label = new JLabel(hurdle);
+                    break;
+                case "wall":
+                    label = new JLabel(wall);
+                    break;
+                case "enemyLvL1":
+                    label = new JLabel(enemyLvL1);
+                    break;
+                case "enemyLvL2":
+                    label = new JLabel(enemyLvL2);
+                    break;
+                case "enemyLvL3":
+                    label = new JLabel(enemyLvL3);
+                    break;
+                case "enemyLvL4":
+                    label = new JLabel(enemyLvL4);
+                    break;
+                case "door":
+                    label = new JLabel(door);
+                    break;
+                case "decreaseBombs":
+                    label = new JLabel("DBombs");
+                    break;
+                case "decreasePoints":
+                    label = new JLabel("DPoints");
+                    break;
+                case "decreaseRadius":
+                    label = new JLabel("DRadius");
+                    break;
+                case "decreaseSpeed":
+                    label = new JLabel("DSpeed");
+                    break;
+                case "loseBombControl":
+                    label = new JLabel("LBC");
+                    break;
+                case "bombControl":
+                    label = new JLabel("BC");
+                    break;
+                case "increaseSpeed":
+                    label = new JLabel("ISpeed");
+                    break;
+                case "increaseRadius":
+                    label = new JLabel("IRadius");
+                    break;
+                case "increasePoints":
+                    label = new JLabel("IPoints");
+                    break;
+                case "increaseBombs":
+                    label = new JLabel("IBombs");
+                    break;
+                case "ghostAbility":
+                    label = new JLabel("Ghost");
+                    break;
+            }
         }
-
         return label;
     }
 
@@ -193,5 +213,9 @@ public class MainFrameGraphics implements Serializable {
 
     public void setTime(JLabel time) {
         this.time = time;
+    }
+
+    public Map<String, ImageIcon> getDisplayMap() {
+        return displayMap;
     }
 }

@@ -51,7 +51,7 @@ public class EnemyMovementThread extends Thread implements Serializable {
                         if (gameBoardCreator.gameComponents[i][j] == enemy) {
 
 
-                            findPossibleDirections(enemy,i, j);
+                            findPossibleDirections(enemy, i, j);
 
                             k++;
 
@@ -73,7 +73,7 @@ public class EnemyMovementThread extends Thread implements Serializable {
         }
     }
 
-    private void findPossibleDirections(Enemy enemy,int i, int j) {
+    private void findPossibleDirections(Enemy enemy, int i, int j) {
         chooseDirection = new ArrayList<>();
 
         up = gameBoardCreator.gameComponents[i - 1][j];
@@ -81,19 +81,19 @@ public class EnemyMovementThread extends Thread implements Serializable {
         down = gameBoardCreator.gameComponents[i + 1][j];
         left = gameBoardCreator.gameComponents[i][j - 1];
 
-        if (enemy.passableObjects.contains(up.getClass().getName())&& !up.isNeverPassable()) {
+        if (enemy.passableObjects.contains(up.getClass().getName())) {
 
             chooseDirection.add(up);
         }
-        if (enemy.passableObjects.contains(right.getClass().getName()) && !right.isNeverPassable()) {
+        if (enemy.passableObjects.contains(right.getClass().getName())) {
 
             chooseDirection.add(right);
         }
-        if (enemy.passableObjects.contains(down.getClass().getName()) && !down.isNeverPassable()) {
+        if (enemy.passableObjects.contains(down.getClass().getName())) {
 
             chooseDirection.add(down);
         }
-        if (enemy.passableObjects.contains(left.getClass().getName()) && !left.isNeverPassable()) {
+        if (enemy.passableObjects.contains(left.getClass().getName())) {
 
             chooseDirection.add(left);
         }
