@@ -18,6 +18,5 @@ public class EnemyLvL2 extends Enemy implements Serializable {
         passableObjects.add("FieldCell");
         passableObjects.add("Player");
 
-
     }
 }
