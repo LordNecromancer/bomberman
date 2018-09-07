@@ -28,12 +28,12 @@ public class JoiningOrCreatingGameRoomInterface extends JFrame {
     private boolean isStarted = false;
     private SettingUpGraphics graphics = new SettingUpGraphics(width, height);
 
-    public JoiningOrCreatingGameRoomInterface(GameClient client) throws IOException {
+    JoiningOrCreatingGameRoomInterface(GameClient client) throws IOException {
         this.client = client;
     }
 
 
-    public void run() throws IOException {
+    void run() throws IOException {
 
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -41,7 +41,6 @@ public class JoiningOrCreatingGameRoomInterface extends JFrame {
         JPanel contentPane = graphics.createContentPane(this);
         joinRoom = new JButton("Join");
         joinRoom.setSize(100, 50);
-        // contentPane.add(joinRoom, BorderLayout.SOUTH);
         createRoom = new JButton("Create");
         createRoom.setSize(100, 50);
         contentPane.add(joinRoom, BorderLayout.EAST);
@@ -103,11 +102,7 @@ public class JoiningOrCreatingGameRoomInterface extends JFrame {
     }
 
 
-    public JTextArea getTextShown() {
+    JTextArea getTextShown() {
         return textShown;
-    }
-
-    public void setTextShown(JTextArea textShown) {
-        this.textShown = textShown;
     }
 }

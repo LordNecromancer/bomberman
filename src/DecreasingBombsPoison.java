@@ -6,7 +6,7 @@ public class DecreasingBombsPoison extends Poison implements Serializable {
     private static final long serialVersionUID = 1113799434508676969L;
 
 
-    public DecreasingBombsPoison() {
+    DecreasingBombsPoison() {
 
         super.setType(type);
     }

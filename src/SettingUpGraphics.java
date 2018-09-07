@@ -1,10 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * Created by Sun on 08/11/2018.
- */
-public class SettingUpGraphics {
+class SettingUpGraphics {
     private int w = 400;
     private int h = 350;
     private int width;
@@ -12,7 +9,7 @@ public class SettingUpGraphics {
     private int startingPointWidth = width / 2 - w / 2;
     private int startingPointHeight = height / 2 - h / 2;
 
-    public SettingUpGraphics(int width, int height) {
+    SettingUpGraphics(int width, int height) {
         this.width = width;
         this.height = height;
     }

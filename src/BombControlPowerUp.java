@@ -14,7 +14,6 @@ public class BombControlPowerUp extends PowerUps implements Serializable {
         super.setType(type);
     }
 
-
     public void doYourThing() {
         GameBoardCreator.player.setBombControl(true);
     }

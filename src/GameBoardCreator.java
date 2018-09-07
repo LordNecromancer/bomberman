@@ -29,6 +29,7 @@ public class GameBoardCreator extends JFrame implements Serializable {
     private MainFrameGraphics mainFrameGraphics = new MainFrameGraphics(this);
     private EnemyMovementThread enemyMove = new EnemyMovementThread(this);
     private EnemyMovementThreadTypeTwo enemyMove2 = new EnemyMovementThreadTypeTwo(this);
+    Music music = new Music();
     private Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
     static Player player = null;
     private int dimension;
@@ -42,6 +43,7 @@ public class GameBoardCreator extends JFrame implements Serializable {
     private Date date;
     private boolean isOnline = false;
     private int maximumEnemyLevel = 4;
+    private Time shieldTime = new Time(30);
 
     public GameBoardCreator(GameManager gameManager, int w, int h, GameComponent[][] gameComponents, Player player, boolean isOnline) {
 
@@ -57,6 +59,7 @@ public class GameBoardCreator extends JFrame implements Serializable {
         }
         GameBoardCreator.points = gameManager.getPoints();
         this.level = gameManager.getLevel();
+
         isMoving = false;
         date = Date.from(Instant.now());
         GameBoardCreator.player = player;
@@ -72,7 +75,7 @@ public class GameBoardCreator extends JFrame implements Serializable {
         mainFrameGraphics.crateGameFrame(w, h, realSizeWidth, realSizeHeight);
     }
 
-    public static int getObstacleScore() {
+    static int getObstacleScore() {
         return obstacleScore;
     }
 
@@ -81,9 +84,8 @@ public class GameBoardCreator extends JFrame implements Serializable {
     }
 
 
-    public void init() {
+    void init() {
 
-        // if (gameComponents == null) {
         if (!isOnline && gameComponents == null) {
             gameComponents = new GameComponent[width + 2][height + 2];
             createNewBoard(width, height);
@@ -95,7 +97,17 @@ public class GameBoardCreator extends JFrame implements Serializable {
     private void loadExistingBoard() {
         setUpLabels();
         if (!isOnline) {
-            createFrame();
+            for (int i = 0; i < width; i++) {
+                for (int j = 0; j < height; j++) {
+                    if (gameComponents[i][j].getType().equals("obstacle")) {
+                        obstacleArray.add((ObstacleCell) gameComponents[i][j]);
+                    }
+
+                }
+
+            }
+            setUpStatChangers();
+            // createFrame();
         }
     }
 
@@ -147,6 +159,7 @@ public class GameBoardCreator extends JFrame implements Serializable {
     private void createRandomEnemies(int width, int height) {
 
         int enemyNum = Math.min(width, height) / 2;
+        // enemyNum = 0;
         enemyCount = enemyNum;
         for (int i = 0; i < enemyNum; ) {
             Random r = new Random();
@@ -215,6 +228,8 @@ public class GameBoardCreator extends JFrame implements Serializable {
         powerUps.add(new IncreasingRadiusPowerUp());
         powerUps.add(new IncreasingSpeedPowerUp());
         powerUps.add(new BombControlPowerUp());
+        powerUps.add(new ShieldAbilityPowerUp());
+
 
         Random r = new Random();
         int m = r.nextInt(powerUps.size() - 1);
@@ -304,25 +319,12 @@ public class GameBoardCreator extends JFrame implements Serializable {
                     setTimer();
                     enemyMove.start();
                     enemyMove2.start();
+                    music.start();
                     isMoving = true;
 
                 }
             }
         }
-    }
-
-
-    public void killPlayer() {
-        player.die();
-        JOptionPane.showMessageDialog(this, "Game Over!!!", "Game Over!", 1);
-
-        enemyMove.stop();
-        enemyMove2.stop();
-        gameComponents[player.getPlayerPositionX()][player.getPlayerPositionY()] = new FieldCell();
-        this.dispose();
-
-        createFrame();
-
     }
 
 
@@ -403,99 +405,49 @@ public class GameBoardCreator extends JFrame implements Serializable {
         this.dispose();
     }
 
-    public static long getBombExplosionTime() {
+    static long getBombExplosionTime() {
         return bombExplosionTime;
     }
 
-    public int getEnemyCount() {
+    int getEnemyCount() {
         return enemyCount;
     }
 
-    public void setEnemyCount(int enemyCount) {
+    void setEnemyCount(int enemyCount) {
         this.enemyCount = enemyCount;
     }
 
-    public Time getGameTime() {
+    Time getGameTime() {
         return gameTime;
     }
 
-    public void setGameTime(Time gameTime) {
+    void setGameTime(Time gameTime) {
         this.gameTime = gameTime;
     }
 
-    public GameManager getGameManager() {
-        return gameManager;
-    }
-
-    public void setGameManager(GameManager gameManager) {
-        this.gameManager = gameManager;
-    }
-
-    public ArrayList<ObstacleCell> getObstacleArray() {
-        return obstacleArray;
-    }
-
-    public void setObstacleArray(ArrayList<ObstacleCell> obstacleArray) {
-        this.obstacleArray = obstacleArray;
-    }
-
-    public int getObstacle() {
-        return obstacle;
-    }
-
-    public void setObstacle(int obstacle) {
-        this.obstacle = obstacle;
-    }
-
-    public ActionListeners getListeners() {
-        return listeners;
-    }
-
-    public void setListeners(ActionListeners listeners) {
-        this.listeners = listeners;
-    }
-
-    public EnemyMovementThread getEnemyMove() {
+    EnemyMovementThread getEnemyMove() {
         return enemyMove;
     }
 
-    public void setEnemyMove(EnemyMovementThread enemyMove) {
-        this.enemyMove = enemyMove;
-    }
-
-    public EnemyMovementThreadTypeTwo getEnemyMove2() {
+    EnemyMovementThreadTypeTwo getEnemyMove2() {
         return enemyMove2;
     }
 
-    public void setEnemyMove2(EnemyMovementThreadTypeTwo enemyMove2) {
-        this.enemyMove2 = enemyMove2;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
+    void setDate(Date date) {
         this.date = date;
     }
 
-    public boolean isOnline() {
+    boolean isOnline() {
         return isOnline;
     }
 
-    public void setOnline(boolean online) {
-        isOnline = online;
-    }
-
-    public ArrayList<Enemy> getEnemies() {
+    ArrayList<Enemy> getEnemies() {
         return enemies;
     }
 
-    public void setEnemies(ArrayList<Enemy> enemies) {
-        this.enemies = enemies;
-    }
-
-    public MainFrameGraphics getMainFrameGraphics() {
+    MainFrameGraphics getMainFrameGraphics() {
         return mainFrameGraphics;
     }
+
+
 }

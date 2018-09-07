@@ -5,12 +5,12 @@ import javax.swing.*;
 /**
  * Created by Sun on 09/05/2018.
  */
-public class LoadNewClass {
+class LoadNewClass {
     Class cls;
     ClassLoader classLoader;
     GameBoardCreator gameBoardCreator;
 
-    public LoadNewClass(Class cls, GameBoardCreator gameBoardCreator) {
+    LoadNewClass(Class cls, GameBoardCreator gameBoardCreator) {
         this.cls = cls;
         this.gameBoardCreator = gameBoardCreator;
         classLoader = new ClassLoader();

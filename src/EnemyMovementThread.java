@@ -4,9 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-/**
- * Created by Sun on 07/08/2018.
- */
+
 public class EnemyMovementThread extends Thread implements Serializable {
 
     GameBoardCreator gameBoardCreator;
@@ -131,11 +129,12 @@ public class EnemyMovementThread extends Thread implements Serializable {
 
     private void moveEnemyLevelTwoSmartly(EnemyLvL2 enemy, int i, int j) {
         if (up == gameBoardCreator.player || down == gameBoardCreator.player || right == gameBoardCreator.player || left == gameBoardCreator.player) {
-            gameBoardCreator.gameComponents[gameBoardCreator.player.getPlayerPositionX()][gameBoardCreator.player.getPlayerPositionY()] = enemy;
-            gameBoardCreator.gameComponents[i][j] = new FieldCell();
-            gameBoardCreator.killPlayer();
-        }
-        if (gameBoardCreator.player.getPlayerPositionX() > i && chooseDirection.contains(down)) {
+            if (!gameBoardCreator.player.hasShield) {
+                gameBoardCreator.gameComponents[gameBoardCreator.player.getPlayerPositionX()][gameBoardCreator.player.getPlayerPositionY()] = enemy;
+                gameBoardCreator.gameComponents[i][j] = new FieldCell();
+            }
+            gameBoardCreator.player.killPlayer();
+        } else if (gameBoardCreator.player.getPlayerPositionX() > i && chooseDirection.contains(down)) {
 
             gameBoardCreator.gameComponents[i + 1][j] = enemy;
             gameBoardCreator.gameComponents[i][j] = new FieldCell();

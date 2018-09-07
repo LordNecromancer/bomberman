@@ -13,7 +13,7 @@ public class WallCell extends GameComponent implements Serializable {
 
     }
 
-    public WallCell() {
+    WallCell() {
 
         super.setType(type);
         super.setPassable(false);

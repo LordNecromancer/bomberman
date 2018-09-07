@@ -9,7 +9,7 @@ public class DecreasingRadiusPoison extends Poison implements Serializable {
     private static final long serialVersionUID = 1113799434508286969L;
 
 
-    public DecreasingRadiusPoison() {
+    DecreasingRadiusPoison() {
         super.setType(type);
     }
 

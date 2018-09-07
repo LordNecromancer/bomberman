@@ -10,7 +10,7 @@ public class BombThread extends Thread implements Serializable {
     private BombCell bomb;
     GameBoardCreator gameBoardCreator;
 
-    public BombThread(BombCell bombCell, GameBoardCreator gameBoardCreator, int x, int y) {
+    BombThread(BombCell bombCell, GameBoardCreator gameBoardCreator, int x, int y) {
         this.bomb = bombCell;
         this.gameBoardCreator = gameBoardCreator;
         this.X = x;
@@ -37,7 +37,7 @@ public class BombThread extends Thread implements Serializable {
 
         gameBoardCreator.gameComponents[X][Y] = new FieldCell();
         if (gameBoardCreator.player.isBombSet() && gameBoardCreator.player.getCurrentBomb() == bomb) {
-            gameBoardCreator.killPlayer();
+            gameBoardCreator.player.killPlayer();
         }
         gameBoardCreator.player.getBombCells().remove(bomb);
         for (int i = X - bomb.getBombRadius(); i <= X + bomb.getBombRadius(); i++) {

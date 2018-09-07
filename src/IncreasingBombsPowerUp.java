@@ -9,7 +9,7 @@ public class IncreasingBombsPowerUp extends PowerUps implements Serializable {
     private static final long serialVersionUID = 1113799434508306969L;
 
 
-    public IncreasingBombsPowerUp() {
+    IncreasingBombsPowerUp() {
         super.setType(type);
     }
 

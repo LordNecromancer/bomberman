@@ -8,7 +8,7 @@ public class IncreasingRadiusPowerUp extends PowerUps implements Serializable {
     private static final long serialVersionUID = 1114799434508316969L;
 
 
-    public IncreasingRadiusPowerUp() {
+    IncreasingRadiusPowerUp() {
         super.setType(type);
     }
 

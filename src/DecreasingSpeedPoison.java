@@ -9,7 +9,7 @@ public class DecreasingSpeedPoison extends Poison implements Serializable {
 
     GameBoardCreator gameBoardCreator;
 
-    public DecreasingSpeedPoison() {
+    DecreasingSpeedPoison() {
         this.gameBoardCreator = gameBoardCreator;
         super.setType(type);
     }

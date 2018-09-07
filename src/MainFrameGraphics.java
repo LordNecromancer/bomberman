@@ -7,10 +7,10 @@ import java.util.Map;
 /**
  * Created by Sun on 07/31/2018.
  */
-public class MainFrameGraphics implements Serializable {
+class MainFrameGraphics implements Serializable {
     GameBoardCreator gameBoardCreator;
 
-    public MainFrameGraphics(GameBoardCreator gameBoardCreator) {
+    MainFrameGraphics(GameBoardCreator gameBoardCreator) {
         this.gameBoardCreator = gameBoardCreator;
     }
 
@@ -104,7 +104,7 @@ public class MainFrameGraphics implements Serializable {
         displayMap.put("door", door);
     }
 
-    public JLabel showTheObject(int i, int j) {
+    JLabel showTheObject(int i, int j) {
 
         JLabel label = gameBoardCreator.labels[i][j];
 
@@ -182,8 +182,7 @@ public class MainFrameGraphics implements Serializable {
         return label;
     }
 
-
-    public ImageIcon getBombIcon(int i, int j) {
+    private ImageIcon getBombIcon(int i, int j) {
         if (gameBoardCreator.player.getPlayerPositionX() == i && gameBoardCreator.player.getPlayerPositionY() == j) {
             return manBomb;
         } else {
@@ -191,31 +190,19 @@ public class MainFrameGraphics implements Serializable {
         }
     }
 
-    public JPanel getCenter() {
+    JPanel getCenter() {
         return center;
     }
 
-    public void setCenter(JPanel center) {
-        this.center = center;
-    }
-
-    public JLabel getScore() {
+    JLabel getScore() {
         return score;
     }
 
-    public void setScore(JLabel score) {
-        this.score = score;
-    }
-
-    public JLabel getTime() {
+    JLabel getTime() {
         return time;
     }
 
-    public void setTime(JLabel time) {
-        this.time = time;
-    }
-
-    public Map<String, ImageIcon> getDisplayMap() {
+    Map<String, ImageIcon> getDisplayMap() {
         return displayMap;
     }
 }

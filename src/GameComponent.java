@@ -21,15 +21,15 @@ public abstract class GameComponent implements Serializable {
         this.type = type;
     }
 
-    public Boolean getPassable() {
+    Boolean getPassable() {
         return passable;
     }
 
-    public void setPassable(Boolean passable) {
+    void setPassable(Boolean passable) {
         this.passable = passable;
     }
 
-    public boolean isNeverPassable() {
+    boolean isNeverPassable() {
         return neverPassable;
     }
 
@@ -37,11 +37,11 @@ public abstract class GameComponent implements Serializable {
         this.neverPassable = neverPassable;
     }
 
-    public boolean isExplosive() {
+    boolean isExplosive() {
         return isExplosive;
     }
 
-    public void setExplosive(boolean explosive) {
+    void setExplosive(boolean explosive) {
         isExplosive = explosive;
     }
 }

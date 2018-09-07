@@ -12,7 +12,7 @@ public class EnemyLvL4 extends Enemy implements Serializable {
     private boolean isGhosting = true;
     private GameComponent disappearedObject = new FieldCell();
 
-    public EnemyLvL4() {
+    EnemyLvL4() {
         super.setLevel(level);
         super.setType(type);
         super.setSleep(sleep);

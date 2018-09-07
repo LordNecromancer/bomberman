@@ -100,12 +100,14 @@ public class EnemyMovementThreadTypeTwo extends Thread implements Serializable {
 
         if (round.get(enemy) == -1) {
             if (up == gameBoardCreator.player || down == gameBoardCreator.player || right == gameBoardCreator.player || left == gameBoardCreator.player) {
-                gameBoardCreator.gameComponents[gameBoardCreator.player.getPlayerPositionX()][gameBoardCreator.player.getPlayerPositionY()] = enemy;
-                gameBoardCreator.gameComponents[i][j] = new FieldCell();
-                gameBoardCreator.killPlayer();
+                if (!gameBoardCreator.player.hasShield) {
+
+                    gameBoardCreator.gameComponents[gameBoardCreator.player.getPlayerPositionX()][gameBoardCreator.player.getPlayerPositionY()] = enemy;
+                    gameBoardCreator.gameComponents[i][j] = new FieldCell();
+                }
+                gameBoardCreator.player.killPlayer();
                 this.stop();
-            }
-            if (gameBoardCreator.player.getPlayerPositionX() > i && chooseDirection.contains(down)) {
+            } else if (gameBoardCreator.player.getPlayerPositionX() > i && chooseDirection.contains(down)) {
 
 
                 if (enemy.getType().equals("enemyLvL4")) {
@@ -159,24 +161,7 @@ public class EnemyMovementThreadTypeTwo extends Thread implements Serializable {
         } else {
 
             round.put(enemy, round.get(enemy) + 1);
-//            if (enemy.type.equals("enemyLvL4")) {
-//                if (up.type.equals("wall") || up.type.equals("obstacle")) {
-//                    up.passable = false;
-//                    chooseDirection.remove(up);
-//                }
-//                if (down.type.equals("wall") || down.type.equals("obstacle")) {
-//                    down.passable = false;
-//                    chooseDirection.remove(down);
-//                }
-//                if (right.type.equals("wall") || right.type.equals("obstacle")) {
-//                    right.passable = false;
-//                    chooseDirection.remove(right);
-//                }
-//                if (left.type.equals("wall") || left.type.equals("obstacle")) {
-//                    left.passable = false;
-//                    chooseDirection.remove(left);
-//                }
-//            }
+
             int randomNum = getRandomDirection();
             movingEnemyRandomly.move(gameBoardCreator, i, j, enemy, randomNum, chooseDirection);
             if (round.get(enemy) == 9) {
@@ -204,7 +189,7 @@ public class EnemyMovementThreadTypeTwo extends Thread implements Serializable {
     }
 
 
-    public int getRandomDirection() {
+    int getRandomDirection() {
 
         Random random = new Random();
 

@@ -30,7 +30,7 @@ public class GameManager implements Serializable {
      * existing board. If no board exist a new board is made.
      */
 
-    public GameManager(int w, int h, GameComponent[][] gameComponents, Boolean isOnline) {
+    GameManager(int w, int h, GameComponent[][] gameComponents, Boolean isOnline) {
 
 
         this.boardWidth = w;
@@ -38,15 +38,12 @@ public class GameManager implements Serializable {
         this.isOnline = isOnline;
         this.gameComponents = gameComponents;
         obstacleCount = (w + h) / 2;
-        // player = new Player(playerx, playery);
-        // gameBoardCreator();
 
     }
 
-    public void createBoard() {
+    void createBoard() {
 
         gameBoardCreator = new GameBoardCreator(this, boardWidth, boardHeight, gameComponents, player, isOnline);
-
     }
 
     void init() {
@@ -54,15 +51,12 @@ public class GameManager implements Serializable {
     }
 
 
-    public int getDimension() {
+    int getDimension() {
         return dimension;
     }
 
-    public Time getGameTime() {
-        return gameTime;
-    }
 
-    public int getObstacleCount() {
+    int getObstacleCount() {
         return obstacleCount;
     }
 
@@ -70,11 +64,11 @@ public class GameManager implements Serializable {
         return bombLimit;
     }
 
-    public int getLevel() {
+    int getLevel() {
         return level;
     }
 
-    public void goToNextLevel(GameBoardCreator gameBoardCreator) {
+    void goToNextLevel(GameBoardCreator gameBoardCreator) {
         level++;
 
         this.gameBoardCreator = new GameBoardCreator(this, gameBoardCreator.width, gameBoardCreator.height, null, gameBoardCreator.player, isOnline);
@@ -102,7 +96,7 @@ public class GameManager implements Serializable {
         this.points = points;
     }
 
-    public int getBombExplosionTime() {
+    int getBombExplosionTime() {
         return bombExplosionTime;
     }
 }

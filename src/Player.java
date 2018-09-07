@@ -1,5 +1,8 @@
+import javax.swing.*;
 import java.io.Serializable;
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.TimerTask;
 
 
 public class Player extends GameComponent implements Serializable {
@@ -10,22 +13,22 @@ public class Player extends GameComponent implements Serializable {
 
     private String name;
     private boolean bombSet = false;
-    private boolean bombControl = false;
+    private boolean bombControl = true;
     private long playerSpeed = 4;
     private BombCell currentBomb = null;
     private final String type = "player";
     private boolean isAlive;
-    private boolean ghostAbility = true;
-    private boolean isGhosting = false;
-    private GameComponent disappearedObject = null;
     private int bombNum = 1;
     private int bombCount = 0;
     private int bombRadius = 1;
+    boolean hasShield = true;
+    private boolean usedShield = false;
+    private Time shieldTime = new Time(30);
     private ArrayList<BombCell> bombCells = new ArrayList<>();
-    ArrayList<String> passableObjects = new ArrayList<>();
+    private ArrayList<String> passableObjects = new ArrayList<>();
 
 
-    public Player(String name) {
+    Player(String name) {
         this.name = name;
         super.setType(type);
         super.setPassable(true);
@@ -34,14 +37,11 @@ public class Player extends GameComponent implements Serializable {
         passableObjects.add("StatChanger");
 
 
-//        this.playerPositionX = x;
-//        this.playerPositionY = y;
-
         this.isAlive = true;
 
     }
 
-    public void die() {
+    void die() {
         this.isAlive = false;
         bombCount = 0;
         bombNum = 1;
@@ -60,66 +60,105 @@ public class Player extends GameComponent implements Serializable {
         }
     }
 
-    public int getPlayerPositionX() {
+    int getPlayerPositionX() {
         return playerPositionX;
     }
 
-    public void setPlayerPositionX(int playerPositionX) {
+    void setPlayerPositionX(int playerPositionX) {
         this.playerPositionX = playerPositionX;
     }
 
-    public int getPlayerPositionY() {
+    int getPlayerPositionY() {
         return playerPositionY;
     }
 
-    public void setPlayerPositionY(int playerPositionY) {
+    void setPlayerPositionY(int playerPositionY) {
         this.playerPositionY = playerPositionY;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public boolean isBombSet() {
+    boolean isBombSet() {
         return bombSet;
     }
 
-    public void setBombSet(boolean bombSet) {
+    void setBombSet(boolean bombSet) {
         this.bombSet = bombSet;
     }
 
-    public boolean isBombControl() {
+    boolean isBombControl() {
         return bombControl;
     }
 
-    public void setBombControl(boolean bombControl) {
+    void setBombControl(boolean bombControl) {
         this.bombControl = bombControl;
     }
 
-    public long getPlayerSpeed() {
+    long getPlayerSpeed() {
         return playerSpeed;
     }
 
-    public void setPlayerSpeed(long playerSpeed) {
+    void setPlayerSpeed(long playerSpeed) {
         this.playerSpeed = playerSpeed;
     }
 
-    public BombCell getCurrentBomb() {
+    BombCell getCurrentBomb() {
         return currentBomb;
     }
 
-    public void setCurrentBomb(BombCell currentBomb) {
+    void setCurrentBomb(BombCell currentBomb) {
         this.currentBomb = currentBomb;
+    }
+
+    void killPlayer() {
+        if (!hasShield) {
+
+            die();
+            JOptionPane.showMessageDialog(null, "Game Over!!!", "Game Over!", 1);
+
+            GameBoardCreator.gameBoardCreator.getEnemyMove().stop();
+            GameBoardCreator.gameBoardCreator.getEnemyMove2().stop();
+            GameBoardCreator.gameBoardCreator.music.stop();
+            GameBoardCreator.gameBoardCreator.gameComponents[getPlayerPositionX()][getPlayerPositionY()] = new FieldCell();
+            GameBoardCreator.gameBoardCreator.dispose();
+        } else {
+            setShieldTimer();
+        }
+
+        GameBoardCreator.gameBoardCreator.createFrame();
+
+    }
+
+    private void setShieldTimer() {
+        if (!usedShield) {
+            usedShield = true;
+            shieldTime = new Time(30);
+            java.util.Timer timer = new java.util.Timer();
+            TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    keepShieldAbility();
+                }
+            };
+            timer.scheduleAtFixedRate(timerTask, 0, 1000);
+        }
+    }
+
+
+    private void keepShieldAbility() {
+
+
+        if (shieldTime.getTime() > 0) {
+            shieldTime.setTime(shieldTime.getTime() - 1);
+            // refreshTimer(gameTime.getTime());
+        } else {
+            hasShield = false;
+            usedShield = false;
+        }
     }
 
     @Override
     public void destroy(GameBoardCreator gameBoardCreator, int i, int j) {
-        gameBoardCreator.gameComponents[i][j] = new FieldCell();
-        gameBoardCreator.killPlayer();
+        //  gameBoardCreator.gameComponents[i][j] = new FieldCell();
+        killPlayer();
     }
 
     @Override
@@ -127,67 +166,44 @@ public class Player extends GameComponent implements Serializable {
         return type;
     }
 
-    public boolean isAlive() {
+    boolean isAlive() {
         return isAlive;
     }
 
-    public void setAlive(boolean alive) {
+    void setAlive(boolean alive) {
         isAlive = alive;
     }
 
-    public boolean isGhostAbility() {
-        return ghostAbility;
-    }
-
-    public void setGhostAbility(boolean ghostAbility) {
-        this.ghostAbility = ghostAbility;
-    }
-
-    public boolean isGhosting() {
-        return isGhosting;
-    }
-
-    public void setGhosting(boolean ghosting) {
-        isGhosting = ghosting;
-    }
-
-    public GameComponent getDisappearedObject() {
-        return disappearedObject;
-    }
-
-    public void setDisappearedObject(GameComponent disappearedObject) {
-        this.disappearedObject = disappearedObject;
-    }
-
-    public int getBombNum() {
+    int getBombNum() {
         return bombNum;
     }
 
-    public void setBombNum(int bombNum) {
+    void setBombNum(int bombNum) {
         this.bombNum = bombNum;
     }
 
-    public int getBombCount() {
+    int getBombCount() {
         return bombCount;
     }
 
-    public void setBombCount(int bombCount) {
+    void setBombCount(int bombCount) {
         this.bombCount = bombCount;
     }
 
-    public int getBombRadius() {
+    int getBombRadius() {
         return bombRadius;
     }
 
-    public void setBombRadius(int bombRadius) {
+    void setBombRadius(int bombRadius) {
         this.bombRadius = bombRadius;
     }
 
-    public ArrayList<BombCell> getBombCells() {
+    ArrayList<BombCell> getBombCells() {
         return bombCells;
     }
 
-    public void setBombCells(ArrayList<BombCell> bombCells) {
-        this.bombCells = bombCells;
+    void putPlayerOnShield() {
+        hasShield = true;
     }
+
 }

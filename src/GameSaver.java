@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.sql.*;
 
-public class GameSaver {
+class GameSaver {
 
     private int gameId;
 

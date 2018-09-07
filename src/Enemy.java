@@ -25,35 +25,31 @@ public abstract class Enemy extends GameComponent implements Serializable {
         super.setPassable(false);
     }
 
-    public int getLevel() {
+    int getLevel() {
         return level;
     }
 
-    public void setLevel(int level) {
+    void setLevel(int level) {
         this.level = level;
     }
 
-    public boolean isGhosting() {
+    boolean isGhosting() {
         return isGhosting;
     }
 
-    public void setGhosting(boolean ghosting) {
+    void setGhosting(boolean ghosting) {
         isGhosting = ghosting;
     }
 
-    public int getSleep() {
-        return sleep;
-    }
-
-    public void setSleep(int sleep) {
+    void setSleep(int sleep) {
         this.sleep = sleep;
     }
 
-    public GameComponent getDisappearedObject() {
+    GameComponent getDisappearedObject() {
         return disappearedObject;
     }
 
-    public void setDisappearedObject(GameComponent disappearedObject) {
+    void setDisappearedObject(GameComponent disappearedObject) {
         this.disappearedObject = disappearedObject;
     }
 }

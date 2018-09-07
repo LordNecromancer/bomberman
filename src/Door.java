@@ -11,7 +11,7 @@ public class Door extends GameComponent implements Serializable {
 
     final private String type = "door";
 
-    public Door() {
+    Door() {
         super.setType(type);
         super.setExplosive(false);
         super.setNeverPassable(true);
