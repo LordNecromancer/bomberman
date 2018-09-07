@@ -18,7 +18,7 @@ class MainFrameGraphics implements Serializable {
     private ImageIcon wall = new ImageIcon("brick.png");
     private ImageIcon bombIcon = new ImageIcon("bomb.png");
     private ImageIcon field = new ImageIcon("grass.jpg");
-    private ImageIcon man = new ImageIcon("man.png");
+     ImageIcon man = new ImageIcon("man.png");
     private ImageIcon manBomb = new ImageIcon("manbomb.png");
     private ImageIcon enemyLvL1 = new ImageIcon("enemyLvL1.png");
     private ImageIcon enemyLvL2 = new ImageIcon("enemyLvL2.png");

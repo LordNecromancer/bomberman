@@ -129,6 +129,7 @@ public class Player extends GameComponent implements Serializable {
 
     private void setShieldTimer() {
         if (!usedShield) {
+            GameBoardCreator.gameBoardCreator.getMainFrameGraphics().man.setDescription("Shield");
             usedShield = true;
             shieldTime = new Time(30);
             java.util.Timer timer = new java.util.Timer();
@@ -152,6 +153,8 @@ public class Player extends GameComponent implements Serializable {
         } else {
             hasShield = false;
             usedShield = false;
+            GameBoardCreator.gameBoardCreator.getMainFrameGraphics().man.setDescription("");
+
         }
     }
 

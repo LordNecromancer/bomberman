@@ -16,12 +16,12 @@ class MovingEnemyRandomly implements Serializable {
         if (randomNum != -1) {
             if (chooseDirection.get(randomNum) == gameBoardCreator.player) {
                 gameBoardCreator.player.killPlayer();
-                gameBoardCreator.getEnemyMove2().stop();
-                gameBoardCreator.getEnemyMove().stop();
+//                gameBoardCreator.getEnemyMove2().stop();
+//                gameBoardCreator.getEnemyMove().stop();
             }
 
 
-            if (chooseDirection.get(randomNum) == up) {
+            else if (chooseDirection.get(randomNum) == up) {
 
                 if (up.getPassable() && !enemy.isGhosting()) {
                     gameBoardCreator.gameComponents[i][j] = new FieldCell();
