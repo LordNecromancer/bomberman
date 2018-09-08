@@ -5,7 +5,7 @@ import java.io.Serializable;
  */
 public class ShieldAbilityPowerUp extends PowerUps implements Serializable {
     final private String type = "increasePoints";
-    private static final long serialVersionUID = 1113799434508316969L;
+    private static final long serialVersionUID = 1213799434508316969L;
 
     GameBoardCreator gameBoardCreator;
 
